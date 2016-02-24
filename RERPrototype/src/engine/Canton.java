@@ -30,7 +30,7 @@ public class Canton {
 
 	public synchronized void enter(Train train) {
 		if (occupyingTrain != null) {
-			System.out.println(toString() + " occupied !");
+			//System.out.println(toString() + " occupied !");
 			// Train stopped just before canton start point !
 			train.setPosition(startPoint - 1);
 			try {
@@ -40,7 +40,7 @@ public class Canton {
 			}
 		}
 
-		System.out.println("Canton changed successfully");
+		//System.out.println("Canton changed successfully");
 		Canton oldCanton = train.getCurrentCanton();
 		train.setCurrentCanton(this);
 		train.updatePosition();
@@ -51,9 +51,12 @@ public class Canton {
 	}
 
 	public synchronized void exit() {
+		if(id >= 12){
+			System.out.println("ON SE LIBERE");
+		}
 		occupyingTrain = null;
 		notify();
-		System.out.println("Canton freed !");
+		//System.out.println("Canton freed !");
 	}
 
 	public boolean isFree() {
@@ -69,20 +72,14 @@ public class Canton {
 		return id;
 	}
 
-	public Station getExitStation() {
-		return exitStation;
+	public Train getOccupyingTrain() {
+		return occupyingTrain;
 	}
 
-	public void setExitStation(Station exitStation) {
-		this.exitStation = exitStation;
+	public void setOccupyingTrain(Train occupyingTrain) {
+		this.occupyingTrain = occupyingTrain;
 	}
 
-	public Station getEnterStation() {
-		return enterStation;
-	}
-
-	public void setEnterStation(Station enterStation) {
-		this.enterStation = enterStation;
-	}
+	
 
 }

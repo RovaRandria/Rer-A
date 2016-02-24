@@ -39,14 +39,28 @@ public class SimulationDashboard extends JPanel {
 		Graphics2D g2 = (Graphics2D) g;
 		printLine(g2);
 		printTrains(g2);
+		int time = (int)SimulationGUI.getCurrentTime();
+		g2.drawString((time+1)/60 + "h"+((time%60<10)?"0":"") + (time%60), 330, START_Y - 75);
+		
 	}
 
 	private void printLine(Graphics2D g2) {
+		g2.setStroke(new BasicStroke(2));
+		g2.setColor(new Color(200,200,0,255));
+		for (Canton canton : line.getCantons()) {
+			int startPoint = canton.getStartPoint();
+			int endPoint = canton.getEndPoint();
+		
+			g2.drawLine(START_X + startPoint, START_Y - 15, START_X + startPoint, START_Y + 15);
+			g2.drawLine(START_X + endPoint, START_Y - 15, START_X + endPoint, START_Y + 15);
+		}
+		
+		
 		g2.setColor(Color.RED);
 		g2.setStroke(new BasicStroke(8));
 		
 		
-		g2.drawLine(START_X, START_Y, START_X + line.getTotalLenght(), START_Y);
+		g2.drawLine(START_X, START_Y, START_X + line.getTotallength(), START_Y);
 		int start = START_X;
 		int i = 0;
 		while( i <line.getStations().size()){
@@ -58,31 +72,15 @@ public class SimulationDashboard extends JPanel {
 				drawStation(g2, line.getStations().get(i), START_Y+60);
 			i++;
 		}
-		
-		/*for (Canton canton : line.getCantons()) {
-			int startPoint = canton.getStartPoint();
-			int endPoint = canton.getEndPoint();
-			if(canton.getClass().getName().equals("demothreading.CantonGare")){
-				g2.setFont(new Font("Dialog", Font.PLAIN, 25));
-				g2.drawString("Gare " + canton.getId(), startPoint + 100, START_Y + 30);
-				g2.drawLine(START_X + startPoint, START_Y - 20, START_X + startPoint, START_Y + 20);
-				g2.drawLine(START_X + endPoint, START_Y - 10, START_X + endPoint, START_Y + 10);
-				
-			}else{
-				g2.setFont(new Font("Dialog", Font.PLAIN, 25));
-				g2.drawString("Canton " + canton.getId(), startPoint + 100, START_Y + 30);
-				g2.drawLine(START_X + startPoint, START_Y - 10, START_X + startPoint, START_Y + 10);
-				g2.drawLine(START_X + endPoint, START_Y - 10, START_X + endPoint, START_Y + 10);
-			}
-		}*/
 	}
+	
 
 	private void printTrains(Graphics2D g2) {
 		g2.setColor(Color.RED);
 		g2.setStroke(new BasicStroke(6));
 		for (Train train : trains) {
 			g2.setFont(new Font("Dialog", Font.PLAIN, 20));
-			g2.drawString("Train", START_X + train.getPosition(), START_Y - 25);
+			g2.drawString(train.getCode(), START_X + train.getPosition(), START_Y - 25);
 			g2.drawLine(START_X + train.getPosition(), START_Y - 5, START_X + train.getPosition(), START_Y + 5);
 		}
 	}

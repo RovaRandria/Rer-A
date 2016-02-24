@@ -7,24 +7,24 @@ import java.util.List;
 
 public class Line {
 
-	private int totalLenght;
+	private int totallength;
 	private int usedLength = 0;
 
 	private List<Canton> cantons = new ArrayList<Canton>();
 	private ArrayList<Station> stations = new ArrayList<Station>();
 	
-	public Line(int totalLenght) {
-		this.totalLenght = totalLenght;
+	public Line(int totallength) {
+		this.totallength = totallength;
 	}
 
 	public void addCanton(int id, int cantonLength) {
 		Canton canton;
-		if (usedLength + cantonLength <= totalLenght) {
+		if (usedLength + cantonLength <= totallength) {
 			canton = new Canton(id, cantonLength, usedLength);
 			usedLength += cantonLength;
 		} else {
-			canton = new Canton(id, totalLenght - usedLength, usedLength);
-			usedLength = totalLenght;
+			canton = new Canton(id, totallength - usedLength, usedLength);
+			usedLength = totallength;
 		}
 		cantons.add(canton);
 	}
@@ -38,11 +38,11 @@ public class Line {
 	}
 	
 	public boolean isFull() {
-		return usedLength == totalLenght;
+		return usedLength == totallength;
 	}
 
-	public int getTotalLenght() {
-		return totalLenght;
+	public int getTotallength() {
+		return totallength;
 	}
 
 	public int getUsedLength() {

@@ -14,19 +14,19 @@ public class Train extends Thread {
 	private List<Station> path = new ArrayList<Station>();
 	private Station currentStation;
 	private boolean running;
-	/**
-	 * Distance per time unit.
-	 */
-	
+	private float startTime;
+	private String code;
 	private int speed;
 	private boolean hasArrived = false;
 
-	public Train(Line line, Canton startCanton, int speed) {
+	
+	public Train(Line line, Canton startCanton, int speed, String code, float startTime) {
 		this.line = line;
-		currentCanton = startCanton;
-		currentCanton.enter(this);
 		this.speed = speed;
+		this.code = code;
+		this.startTime = startTime;
 		running = false;
+		currentCanton = startCanton;
 	}
 
 	public int getPosition() {
@@ -47,51 +47,85 @@ public class Train extends Thread {
 
 	@Override
 	public void run() {
-		if(running = false){
-			try {
+		if(!running && !hasArrived){
+			while (SimulationGUI.getCurrentTime() < startTime){
+				try {
+					sleep(SimulationGUI.TIME_UNIT);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println(this.getCode() + " est en train d'attendre la minute " + startTime );
+			}
+			startRunning();
+			
+			int time = (int)SimulationGUI.getCurrentTime();
+			System.out.println(this.getCode() + " démarre, il est " + (time+1)/60 + "h"+((time%60<10)?"0":"") + (time%60));
+			/*try {
 				wait();
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
-		}
-		
-		while (!hasArrived) {
-			try {
-				sleep(SimulationGUI.TIME_UNIT);
-			} catch (InterruptedException e) {
-				System.err.println(e.getMessage());
-			}
-			if (position + speed >= currentCanton.getEndPoint()) {
+			}*/
+			while (!hasArrived && running) {
+				System.out.println(this.getCode() + " est en train de rouler");
 				try {
-					
-					Canton nextCanton = line.getCantonByPosition(position + speed);
-					nextCanton.enter(this);
-				} catch (TerminusException e) {
-					hasArrived = true;
-					position = line.getTotalLenght();
-				}
-			}else if(position + speed >= currentStation.getPosition()){
-				position = currentStation.getPosition();
-				try {
-					sleep(1000);
+					sleep(SimulationGUI.TIME_UNIT);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}currentStation = path.get(0);
-				path.remove(0);
-			}else {
+					System.err.println(e.getMessage());
+				}
 				
-			
-				updatePosition();
+				System.out.println(this.getCode() + " est encore en train de rouler");
+				
+				if(position + speed >= currentStation.getPosition()){
+					
+					position = currentStation.getPosition();
+					try {
+						sleep(SimulationGUI.TIME_UNIT * 3);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					if(!path.isEmpty()){
+						currentStation = path.get(0);
+						path.remove(0);
+					}
+				}else if (position + speed >= currentCanton.getEndPoint()) {
+					try {
+						
+						Canton nextCanton = line.getCantonByPosition(position + speed);
+						nextCanton.enter(this);
+					} catch (TerminusException e) {
+						hasArrived = true;
+						position = line.getTotallength();
+						this.currentCanton.exit();
+						this.currentCanton = null;
+					}
+				}else {
+					
+				
+					updatePosition();
+				}
 			}
+			currentCanton.exit();
 		}
-		currentCanton.exit();
+			
 	}
 
 	@Override
 	public String toString() {
 		return "Train [speed=" + speed + "]";
+	}
+
+
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public void updatePosition() {
@@ -101,15 +135,24 @@ public class Train extends Thread {
 	public void setPath(ArrayList<Station> path){
 		this.path = path;
 	}
-	@Override
 	
-	public synchronized void start(){
+	public synchronized void startRunning(){
 		if(!path.isEmpty()){
 			currentStation = path.get(0);
 			path.remove(0);
-			notify();
+			running = true;
+			currentCanton.enter(this);
+			//notify();
 		}
-		super.start();
 	}
 
+	public float getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(float startTime) {
+		this.startTime = startTime;
+	}
+
+	
 }

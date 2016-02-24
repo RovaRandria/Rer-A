@@ -38,12 +38,10 @@ public class LineBuilder {
 		line.addStation("Conflans Fin d'Oise", 250);
 		
 		line.addStation("Achères ville", 310);
-		line.addStation("Maison Lafitte", 400);
+		line.addStation("Maison Laffitte", 400);
 		
 		line.addStation("Sartrouville", 450);
 		line.addStation("Marne-La-Vallée", 600);
-		
-		
 		
 	}
 
