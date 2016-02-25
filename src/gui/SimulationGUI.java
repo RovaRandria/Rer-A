@@ -1,24 +1,26 @@
 package gui;
 
-
+import java.awt.event.*;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import engine.Canton;
 import engine.Line;
@@ -34,10 +36,14 @@ public class SimulationGUI extends JFrame implements Runnable {
 	private static final long serialVersionUID = 1L;
 	private static final int TRAIN_SPEED_VARIATION = 3;
 	private static final int TRAIN_BASIC_SPEED = 2;
-	private SimulationDashboard dashboard = new SimulationDashboard();
+	private JButton pathValue=new JButton("Parcourir");
+	private String path="";
+	private SimulationDashboard dashboard = new SimulationDashboard(path);
 	private static float currentTime = 0;
 	private static final int SIMULATION_DURATION = 1440;
 	public static final int TIME_UNIT = 50;
+	private JLabel browserPath=new JLabel("Chemin à explorer :");
+	private Font font = new Font(Font.MONOSPACED, Font.BOLD, 15);
 
 	private JPanel wholeFrame = new JPanel();
 	private JScrollPane dashboardScrollPanel = new JScrollPane();
@@ -54,21 +60,45 @@ public class SimulationGUI extends JFrame implements Runnable {
 	ImageIcon hoursIcon = new ImageIcon("./img/icons/hours.png");
 	ImageIcon eventsIcon = new ImageIcon("./img/icons/events.png");
 	ImageIcon manageIcon = new ImageIcon("./img/icons/manage.png");
+	
 
-	public SimulationGUI() {
+	public SimulationGUI(String fileName) {
 		super("Train simulation");
-		init();
+		init(fileName);
 		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		Exit();
 	}
+	
+
+	 
+	public SimulationGUI() {
+		Container contentPane = getContentPane();
+		contentPane.setLayout(new FlowLayout(3,20,20));
+		browserPath.setFont(font);
+		contentPane.add(browserPath);
+		pathValue.setFont(font);
+		pathValue.addActionListener(new PathBrowserAction());
+		contentPane.add(pathValue);
+		setSize(400, 100);
+		setResizable(false);
+		setVisible(true);
+	}
+	
+	 public void Exit(){
+	      addWindowListener(new WindowAdapter(){
+	         public void windowClosing(WindowEvent e){
+	           dispose();
+	           System.exit(0);
+	         }
+	      });
+	   }
 
 	public static void main(String[] args) {
 		SimulationGUI simulationGUI = new SimulationGUI();
-		Thread simulationThread = new Thread(simulationGUI);
-		simulationThread.start();
 	}
 
-	public void init() {
+	public void init(String fileName) {
+		dashboard = new SimulationDashboard(fileName);
 		wholeFrame.setLayout(new GridBagLayout());
 		GridBagConstraints frameConstraints = new GridBagConstraints();
 		Font font = new Font("Arial",Font.BOLD,40);
@@ -154,6 +184,34 @@ public class SimulationGUI extends JFrame implements Runnable {
 		return currentTime;
 	}
 
+	private class PathBrowserAction implements ActionListener {
+		public void actionPerformed(ActionEvent e){
+			
+			path=Storepath(path);
+			if(!path.equals("")){
+				setVisible(false);
+			SimulationGUI simulationGUI2 = new SimulationGUI(path);
+			Thread simulationThread = new Thread(simulationGUI2);
+			simulationThread.start();
+			}
+		}
+	}
+	
+	public String Storepath(String storepath){
+		Container contentPane = getContentPane();
+
+		JFileChooser jfc = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+		jfc.setFileFilter(filter);
+		jfc.setDialogTitle("Choix du fichier");
+		int returnValue = jfc.showOpenDialog(contentPane);
+		if(returnValue == JFileChooser.APPROVE_OPTION) {
+		File file = jfc.getSelectedFile();
+		storepath=file.getPath();
+		}
+		return storepath;
+	}
+	
 	private class HoursPanel extends JPanel {
 
 		private static final long serialVersionUID = 1L;
@@ -188,6 +246,8 @@ public class SimulationGUI extends JFrame implements Runnable {
 			super();
 			init();
 		}
+		
+
 		
 		public void init() {
 			eventsTextArea.setText("Ici seront affiché prochainement les évènements");

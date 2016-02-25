@@ -27,9 +27,9 @@ public class SimulationDashboard extends JPanel {
 	private static final int START_X = 50;
 	private static final int START_Y = 150;
 	
-	public SimulationDashboard() {
+	public SimulationDashboard(String fileName) {
 		LineBuilder lineBuilder = new LineBuilder();
-		lineBuilder.buildLine(1200, 150);
+		lineBuilder.buildLine(1200, 150,fileName);
 		line = lineBuilder.getBuiltLine();
 	}
 
