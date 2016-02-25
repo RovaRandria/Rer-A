@@ -80,6 +80,34 @@ public class Canton {
 		this.occupyingTrain = occupyingTrain;
 	}
 
+	public Station getEnterStation() {
+		return enterStation;
+	}
+
+	public void setEnterStation(Station enterStation) {
+		this.enterStation = enterStation;
+	}
+
+	public Station getExitStation() {
+		return exitStation;
+	}
+
+	public void setExitStation(Station exitStation) {
+		this.exitStation = exitStation;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setStartPoint(int startPoint) {
+		this.startPoint = startPoint;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
 	
 
 }

@@ -31,17 +31,17 @@ public class LineBuilder {
 		
 		line.addStation("Cergy-Le-Haut", 0);
 		line.addStation("Cergy-StChristophe", 100);
-		line.addStation("Cergy-Prefecture", 150);
+		line.addStation("Cergy-Pr√©fecture", 150);
 		
-		line.addStation("Neuville UniversitÈ", 200);
+		line.addStation("Neuville Universit√©", 200);
 		
 		line.addStation("Conflans Fin d'Oise", 250);
 		
-		line.addStation("AchËres ville", 310);
+		line.addStation("Ach√®res ville", 310);
 		line.addStation("Maison Laffitte", 400);
 		
 		line.addStation("Sartrouville", 450);
-		line.addStation("Marne-La-VallÈe", 600);
+		line.addStation("Marne-La-Vall√©e", 600);
 		
 	}
 
