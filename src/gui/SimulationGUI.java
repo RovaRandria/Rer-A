@@ -80,7 +80,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		frameConstraints.gridy = 1;
 		dashboardScrollPanel = new JScrollPane(dashboard);
 		dashboard.setPreferredSize(new Dimension(710, 200));
-		dashboardScrollPanel.setPreferredSize(new Dimension(700, 400));
+		dashboardScrollPanel.setPreferredSize(new Dimension(700, 300));
 		wholeFrame.add(dashboardScrollPanel, frameConstraints);
 
 		infoTabbedPanel.addTab("Horaires", hoursIcon, trainsHoursPanel,	"Horaires des trains quoi");
@@ -88,11 +88,11 @@ public class SimulationGUI extends JFrame implements Runnable {
 		infoTabbedPanel.addTab("Gestion", manageIcon, managementPanel,"Gestion des trains quoi");		
 		manageLabel.setText("Ici sera situé prochainement la gestion du programme");
 		managementPanel.add(manageLabel);
-		infoTabbedPanel.setPreferredSize(new Dimension(700, 400));
+		infoTabbedPanel.setPreferredSize(new Dimension(700, 300));
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 2;
 		wholeFrame.add(infoTabbedPanel, frameConstraints);
-		wholeFrame.setPreferredSize(new Dimension(700, 850));
+		wholeFrame.setPreferredSize(new Dimension(700, 650));
 		this.add(wholeFrame);
 		pack();
 		setVisible(true);
