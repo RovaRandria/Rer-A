@@ -74,4 +74,17 @@ public class Line {
 		return (ArrayList<Station>)  stations.clone();
 	}
 
+	public Line getReversedLine(){
+		Line reversedLine = new Line(this.totallength);
+		int i;
+		for(i = cantons.size()-1;i>=0;i--){
+			reversedLine.addCanton(cantons.size()-1-i, cantons.get(i).getLength());
+		}
+		for(i = stations.size()-1;i>=0;i--){
+			reversedLine.addStation(stations.get(i).getName(), totallength - stations.get(i).getPosition());
+		}
+		
+		
+		return reversedLine;
+	}
 }

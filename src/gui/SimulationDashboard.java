@@ -23,40 +23,40 @@ public class SimulationDashboard extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Line line;
+	private Line reversedLine;
 	private List<Train> trains = new ArrayList<Train>();
 	private static final int START_X = 50;
 	private static final int START_Y = 150;
 	
-	public SimulationDashboard(String fileName) {
-		LineBuilder lineBuilder = new LineBuilder();
-		lineBuilder.buildLine(1200, 150,fileName);
-		line = lineBuilder.getBuiltLine();
+	public SimulationDashboard() {
+		
 	}
 
-	public void addTrain(Train train) {
-		trains.add(train);
+	public void setReversedLine(Line reversedLine) {
+		this.reversedLine = reversedLine;
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
-		printLine(g2);
-		printTrains(g2);
+		printLine(line, START_X, START_Y, g2);
+		printLine(reversedLine, START_X, START_Y + 150, g2);
+		printTrains(START_X, START_Y, g2);
 		int time = (int)SimulationGUI.getCurrentTime();
 		g2.drawString((time+1)/60 + "h"+((time%60<10)?"0":"") + (time%60), 330, START_Y - 75);
 		
 	}
 
-	private void printLine(Graphics2D g2) {
+	private void printLine(Line line, int startX, int startY, Graphics2D g2) {
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(new Color(200,200,0,255));
 		for (Canton canton : line.getCantons()) {
 			int startPoint = canton.getStartPoint();
 			int endPoint = canton.getEndPoint();
 		
-			g2.drawLine(START_X + startPoint, START_Y - 15, START_X + startPoint, START_Y + 15);
-			g2.drawLine(START_X + endPoint, START_Y - 15, START_X + endPoint, START_Y + 15);
+			g2.drawLine(startX + startPoint, startY - 15, startX + startPoint, startY + 15);
+			g2.drawLine(startX + endPoint, startY - 15, startX + endPoint, startY + 15);
 		}
 		
 		
@@ -64,34 +64,42 @@ public class SimulationDashboard extends JPanel {
 		g2.setStroke(new BasicStroke(8));
 		
 		
-		g2.drawLine(START_X, START_Y, START_X + line.getTotallength(), START_Y);
-		int start = START_X;
+		g2.drawLine(startX, startY, startX + line.getTotallength(), startY);
+		int start = startX;
 		int i = 0;
 		while( i <line.getStations().size()){
 			if(i%3 == 0)
-				drawStation(g2, line.getStations().get(i), START_Y+20);
+				drawStation(startX, startY, g2, line.getStations().get(i), startY+20);
 			else if(i%3 == 1)
-				drawStation(g2, line.getStations().get(i), START_Y+40);
+				drawStation(startX, startY, g2, line.getStations().get(i), startY+40);
 			else
-				drawStation(g2, line.getStations().get(i), START_Y+60);
+				drawStation(startX, startY, g2, line.getStations().get(i), startY+60);
 			i++;
 		}
 	}
 	
 
-	private void printTrains(Graphics2D g2) {
+	private void printTrains(int startX, int startY, Graphics2D g2) {
 		g2.setColor(Color.RED);
 		g2.setStroke(new BasicStroke(6));
 		for (Train train : trains) {
-			g2.setFont(new Font("Dialog", Font.PLAIN, 20));
-			g2.drawString(train.getCode(), START_X + train.getPosition(), START_Y - 25);
-			g2.drawLine(START_X + train.getPosition(), START_Y - 5, START_X + train.getPosition(), START_Y + 5);
-		}
+			
+			if(train.getLine() == line) {
+				g2.setFont(new Font("Dialog", Font.PLAIN, 20));
+				g2.drawString(train.getCode(), startX + train.getPosition(), startY - 25);
+				g2.drawLine(startX + train.getPosition(), startY - 5, startX + train.getPosition(), startY + 5);
+			}
+			else if(train.getLine() == reversedLine){
+				g2.setFont(new Font("Dialog", Font.PLAIN, 20));
+				g2.drawString(train.getCode(), startX + train.getPosition(), startY + 125);
+				g2.drawLine(startX + train.getPosition(), startY + 145, startX + train.getPosition(), startY + 155);
+			}
+		}	
 	}
 
-	private void drawStation(Graphics2D g2, Station s, int textPos){
-		int x = START_X + s.getPosition();
-		int y = START_Y;
+	private void drawStation(int startX, int startY, Graphics2D g2, Station s, int textPos){
+		int x = startX + s.getPosition();
+		int y = startY;
 		g2.setColor(Color.RED);
 		g2.fillOval(x-10, y-10, 20, 20);
 		g2.setColor(Color.WHITE);

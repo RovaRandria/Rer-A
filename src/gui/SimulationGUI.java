@@ -27,6 +27,7 @@ import engine.Line;
 import engine.TerminusException;
 import engine.Train;
 import engine.Station;
+import engine.TrainSimulator;
 
 
 public class SimulationGUI extends JFrame implements Runnable {
@@ -38,7 +39,8 @@ public class SimulationGUI extends JFrame implements Runnable {
 	private static final int TRAIN_BASIC_SPEED = 2;
 	private JButton pathValue=new JButton("Parcourir");
 	private String path="";
-	private SimulationDashboard dashboard = new SimulationDashboard(path);
+	private SimulationDashboard dashboard;
+	private TrainSimulator trainsim;
 	private static float currentTime = 0;
 	private static final int SIMULATION_DURATION = 1440;
 	public static final int TIME_UNIT = 50;
@@ -98,7 +100,10 @@ public class SimulationGUI extends JFrame implements Runnable {
 	}
 
 	public void init(String fileName) {
-		dashboard = new SimulationDashboard(fileName);
+		dashboard = new SimulationDashboard();
+		trainsim = new TrainSimulator(fileName);
+		dashboard.setLine(trainsim.getLine());
+		dashboard.setReversedLine(trainsim.getReversedLine());
 		wholeFrame.setLayout(new GridBagLayout());
 		GridBagConstraints frameConstraints = new GridBagConstraints();
 		Font font = new Font("Arial",Font.BOLD,40);
@@ -109,7 +114,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 1;
 		dashboardScrollPanel = new JScrollPane(dashboard);
-		dashboard.setPreferredSize(new Dimension(710, 200));
+		dashboard.setPreferredSize(new Dimension(dashboard.getLine().getTotallength() + 100, 500));
 		dashboardScrollPanel.setPreferredSize(new Dimension(700, 300));
 		wholeFrame.add(dashboardScrollPanel, frameConstraints);
 
@@ -132,43 +137,57 @@ public class SimulationGUI extends JFrame implements Runnable {
 	@Override
 	public void run() {
 
-		Line line = dashboard.getLine();
+		Line line = trainsim.getLine();
+		Line reversedLine = trainsim.getReversedLine();
 		Canton firstCanton = line.getCantons().get(0);
 
-		Train newTrain = new Train(line, firstCanton, 2, "QYEN", 0);
-		dashboard.addTrain(newTrain);
+		Train newTrain = new Train(line, firstCanton, 5, "QYEN", 0);
+		trainsim.addTrain(newTrain);
+		newTrain.setPath(line.getFullPath());
+		newTrain.start();
+		
+		newTrain = new Train(reversedLine, reversedLine.getCanton(0), 5, "TEDI", 0);
+		trainsim.addTrain(newTrain);
+		newTrain.setPath(trainsim.getReversedLine().getFullPath());
+		newTrain.start();
+
+		newTrain = new Train(line, firstCanton, 5, "QYEN", 30);
+		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
 		newTrain.start();
 
-		newTrain = new Train(line, firstCanton, 2, "QYEN", 30);
-		dashboard.addTrain(newTrain);
+		newTrain = new Train(line, firstCanton, 5, "QYEN", 60);
+		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
 		newTrain.start();
 
-		newTrain = new Train(line, firstCanton, 2, "QYEN", 60);
-		dashboard.addTrain(newTrain);
+		newTrain = new Train(line, firstCanton, 5, "QYEN", 90);
+		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
 		newTrain.start();
 
-		newTrain = new Train(line, firstCanton, 2, "QYEN", 90);
-		dashboard.addTrain(newTrain);
+		newTrain = new Train(line, firstCanton, 5, "QYEN", 120);
+		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
 		newTrain.start();
-
-		newTrain = new Train(line, firstCanton, 2, "QYEN", 120);
-		dashboard.addTrain(newTrain);
-		newTrain.setPath(line.getFullPath());
+		
+		newTrain = new Train(trainsim.getReversedLine(), reversedLine.getCanton(0), 5, "TEDI2", 120);
+		trainsim.addTrain(newTrain);
+		newTrain.setPath(trainsim.getReversedLine().getFullPath());
 		newTrain.start();
 
-		newTrain = new Train(line, firstCanton, 2, "QYEN", 150);
-		dashboard.addTrain(newTrain);
+		newTrain = new Train(line, firstCanton, 5, "QYEN", 150);
+		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
 		newTrain.start();
 
 
 
 		while (currentTime <= SIMULATION_DURATION) {
+			dashboard.setTrains(trainsim.getTrains());
 			dashboard.repaint();
+			
+			
 			try {
 				Thread.sleep(TIME_UNIT);
 			} catch (InterruptedException e) {

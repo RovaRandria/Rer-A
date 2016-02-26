@@ -55,12 +55,10 @@ public class Train extends Thread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.out.println(this.getCode() + " est en train d'attendre la minute " + startTime );
 			}
 			startRunning();
 			
 			int time = (int)SimulationGUI.getCurrentTime();
-			System.out.println(this.getCode() + " démarre, il est " + (time+1)/60 + "h"+((time%60<10)?"0":"") + (time%60));
 			/*try {
 				wait();
 			} catch (InterruptedException e1) {
@@ -68,14 +66,11 @@ public class Train extends Thread {
 				e1.printStackTrace();
 			}*/
 			while (!hasArrived && running) {
-				System.out.println(this.getCode() + " est en train de rouler");
 				try {
 					sleep(SimulationGUI.TIME_UNIT);
 				} catch (InterruptedException e) {
 					System.err.println(e.getMessage());
 				}
-				
-				System.out.println(this.getCode() + " est encore en train de rouler");
 				
 				if(position + speed >= currentStation.getPosition()){
 					
@@ -90,6 +85,11 @@ public class Train extends Thread {
 					if(!path.isEmpty()){
 						currentStation = path.get(0);
 						path.remove(0);
+					}else{
+						hasArrived = true;
+						position = line.getTotallength();
+						this.currentCanton.exit();
+						this.currentCanton = null;
 					}
 				}else if (position + speed >= currentCanton.getEndPoint()) {
 					try {
@@ -97,6 +97,7 @@ public class Train extends Thread {
 						Canton nextCanton = line.getCantonByPosition(position + speed);
 						nextCanton.enter(this);
 					} catch (TerminusException e) {
+						System.out.println("ON EST SORTI");
 						hasArrived = true;
 						position = line.getTotallength();
 						this.currentCanton.exit();
@@ -108,7 +109,6 @@ public class Train extends Thread {
 					updatePosition();
 				}
 			}
-			currentCanton.exit();
 		}
 			
 	}
@@ -152,6 +152,10 @@ public class Train extends Thread {
 
 	public void setStartTime(float startTime) {
 		this.startTime = startTime;
+	}
+
+	public Line getLine() {
+		return line;
 	}
 
 	

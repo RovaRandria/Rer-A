@@ -51,9 +51,6 @@ public class Canton {
 	}
 
 	public synchronized void exit() {
-		if(id >= 12){
-			System.out.println("ON SE LIBERE");
-		}
 		occupyingTrain = null;
 		notify();
 		//System.out.println("Canton freed !");
