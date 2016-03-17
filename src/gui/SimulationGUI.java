@@ -9,7 +9,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -141,6 +145,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		Line reversedLine = trainsim.getReversedLine();
 		Canton firstCanton = line.getCantons().get(0);
 
+		/*
 		Train newTrain = new Train(line, firstCanton, 5, "QYEN", 0);
 		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
@@ -179,7 +184,44 @@ public class SimulationGUI extends JFrame implements Runnable {
 		newTrain = new Train(line, firstCanton, 5, "QYEN", 150);
 		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
-		newTrain.start();
+		newTrain.start();*/
+		
+		String fileName= SimulationGUI.class.getResource("/trains.txt").getPath();
+		String str1[] = null;
+		String l;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			while ((l = br.readLine()) != null) {
+				String separator1="\\|";
+				str1=l.split(separator1);
+				
+					if(str1[0].equals("line")){
+				
+						Train newTrain = new Train(line, firstCanton,Integer.parseInt(str1[1]),str1[2], Integer.parseInt(str1[3]));
+						trainsim.addTrain(newTrain);
+						newTrain.setPath(line.getFullPath());
+						newTrain.start();
+					}
+					else if(str1[0].equals("reversedLine")){
+			
+						Train newTrain = new Train(trainsim.getReversedLine(), reversedLine.getCanton(0),Integer.parseInt(str1[1]),str1[2], Integer.parseInt(str1[3]));
+						trainsim.addTrain(newTrain);
+						newTrain.setPath(trainsim.getReversedLine().getFullPath());
+						newTrain.start();
+					}
+					}
+			
+			br.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Le chemin du fichier texte entré est incorrect");
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+		catch(NullPointerException ee){
+			System.out.println("Fichier entré incorrect");
+		}
+		
+		
 
 
 
