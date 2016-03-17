@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class LineBuilder {
 	private Line line;
 
-	public void buildLine(int totalLength, int cantonLength,String fileName) {
+	public void buildLine(String fileName) {
 		/*line = new Line(totalLength);
 		int id = 1;
 		while (!line.isFull()) {

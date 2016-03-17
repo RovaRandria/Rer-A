@@ -1,0 +1,6 @@
+line|20|QYEN|0
+line|20|QYEN|30
+line|20|QYEN|60
+line|20|QYEN|90
+line|20|QYEN|120
+line|20|QYEN|150

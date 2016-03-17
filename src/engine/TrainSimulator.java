@@ -10,7 +10,7 @@ public class TrainSimulator {
 	
 	public TrainSimulator(String fileName) {
 		LineBuilder lineBuilder = new LineBuilder();
-		lineBuilder.buildLine(1200, 150,fileName);
+		lineBuilder.buildLine(fileName);
 		line = lineBuilder.getBuiltLine();
 		if(line != null)
 			reversedLine = line.getReversedLine();

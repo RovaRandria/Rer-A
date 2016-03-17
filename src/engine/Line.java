@@ -63,6 +63,7 @@ public class Line {
 	public Canton getCantonByPosition(int position) throws TerminusException {
 		for (Canton canton : cantons) {
 			if (canton.getEndPoint() > position) {
+				System.out.println("On cherche le canton à la position " + position +". C'est le canton "+canton.toString());
 				return canton;
 			}
 		}

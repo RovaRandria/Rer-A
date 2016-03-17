@@ -46,6 +46,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 	private SimulationDashboard dashboard;
 	private TrainSimulator trainsim;
 	private static float currentTime = 0;
+	private static float speed = 1;
 	private static final int SIMULATION_DURATION = 1440;
 	public static final int TIME_UNIT = 50;
 	private JLabel browserPath=new JLabel("Chemin à explorer :");
@@ -273,6 +274,16 @@ public class SimulationGUI extends JFrame implements Runnable {
 		return storepath;
 	}
 	
+	public static float getSpeed() {
+		return speed;
+	}
+
+
+
+	public static void setSpeed(float speed) {
+		SimulationGUI.speed = speed;
+	}
+
 	private class HoursPanel extends JPanel {
 
 		private static final long serialVersionUID = 1L;

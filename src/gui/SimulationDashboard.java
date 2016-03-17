@@ -28,6 +28,9 @@ public class SimulationDashboard extends JPanel {
 	private static final int START_X = 50;
 	private static final int START_Y = 150;
 	
+	private static final int distancePerPixel = 10;	
+	
+	
 	public SimulationDashboard() {
 		
 	}
@@ -55,8 +58,8 @@ public class SimulationDashboard extends JPanel {
 			int startPoint = canton.getStartPoint();
 			int endPoint = canton.getEndPoint();
 		
-			g2.drawLine(startX + startPoint, startY - 15, startX + startPoint, startY + 15);
-			g2.drawLine(startX + endPoint, startY - 15, startX + endPoint, startY + 15);
+			g2.drawLine(startX + startPoint/distancePerPixel, startY - 15, startX + startPoint/distancePerPixel, startY + 15);
+			g2.drawLine(startX + endPoint/distancePerPixel, startY - 15, startX + endPoint/distancePerPixel, startY + 15);
 		}
 		
 		
@@ -64,7 +67,7 @@ public class SimulationDashboard extends JPanel {
 		g2.setStroke(new BasicStroke(8));
 		
 		
-		g2.drawLine(startX, startY, startX + line.getTotallength(), startY);
+		g2.drawLine(startX, startY, startX + line.getTotallength()/distancePerPixel, startY);
 		int start = startX;
 		int i = 0;
 		while( i <line.getStations().size()){
@@ -86,19 +89,19 @@ public class SimulationDashboard extends JPanel {
 			
 			if(train.getLine() == line) {
 				g2.setFont(new Font("Dialog", Font.PLAIN, 20));
-				g2.drawString(train.getCode(), startX + train.getPosition(), startY - 25);
-				g2.drawLine(startX + train.getPosition(), startY - 5, startX + train.getPosition(), startY + 5);
+				g2.drawString(train.getCode(), startX + train.getPosition()/distancePerPixel, startY - 25);
+				g2.drawLine(startX + train.getPosition()/distancePerPixel, startY - 5, startX + train.getPosition()/distancePerPixel, startY + 5);
 			}
 			else if(train.getLine() == reversedLine){
 				g2.setFont(new Font("Dialog", Font.PLAIN, 20));
-				g2.drawString(train.getCode(), startX + train.getPosition(), startY + 125);
-				g2.drawLine(startX + train.getPosition(), startY + 145, startX + train.getPosition(), startY + 155);
+				g2.drawString(train.getCode(), startX + train.getPosition()/distancePerPixel, startY + 125);
+				g2.drawLine(startX + train.getPosition()/distancePerPixel, startY + 145, startX + train.getPosition()/distancePerPixel, startY + 155);
 			}
 		}	
 	}
 
 	private void drawStation(int startX, int startY, Graphics2D g2, Station s, int textPos){
-		int x = startX + s.getPosition();
+		int x = startX + s.getPosition()/distancePerPixel;
 		int y = startY;
 		g2.setColor(Color.RED);
 		g2.fillOval(x-10, y-10, 20, 20);

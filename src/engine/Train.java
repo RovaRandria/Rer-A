@@ -27,6 +27,7 @@ public class Train extends Thread {
 		this.startTime = startTime;
 		running = false;
 		currentCanton = startCanton;
+		
 	}
 
 	public int getPosition() {
@@ -71,9 +72,9 @@ public class Train extends Thread {
 				} catch (InterruptedException e) {
 					System.err.println(e.getMessage());
 				}
-				
-				if(position + speed >= currentStation.getPosition()){
-					
+				//System.out.println("position : " + getPosition());
+				trainIsComing();
+				if(position + distancePerFrame() >= currentStation.getPosition()){
 					position = currentStation.getPosition();
 					try {
 						sleep(SimulationGUI.TIME_UNIT * 3);
@@ -91,11 +92,12 @@ public class Train extends Thread {
 						this.currentCanton.exit();
 						this.currentCanton = null;
 					}
-				}else if (position + speed >= currentCanton.getEndPoint()) {
+				}else if (position + distancePerFrame() >= currentCanton.getEndPoint()) {
 					try {
-						
-						Canton nextCanton = line.getCantonByPosition(position + speed);
+						System.out.println("Position actuelle : " + position);
+						Canton nextCanton = line.getCantonByPosition(position +  distancePerFrame());
 						nextCanton.enter(this);
+						System.out.println("Position après changement de canton : " + position);
 					} catch (TerminusException e) {
 						System.out.println("ON EST SORTI");
 						hasArrived = true;
@@ -129,9 +131,12 @@ public class Train extends Thread {
 	}
 
 	public void updatePosition() {
-		position += speed;
+		position += distancePerFrame();
 	}
 	
+	public int distancePerFrame(){
+		return (int)((float)(speed*100/60) * SimulationGUI.getSpeed());
+	}
 	public void setPath(ArrayList<Station> path){
 		this.path = path;
 	}
@@ -158,5 +163,20 @@ public class Train extends Thread {
 		return line;
 	}
 
+	public void trainIsComing(){
+		if(currentStation != null){
+			int pos =currentStation.getPosition()-getPosition();
+			int arrivalTime=pos/distancePerFrame();
+			System.out.println("Train is coming in:"+arrivalTime);
+		}
+	}
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
 	
 }
