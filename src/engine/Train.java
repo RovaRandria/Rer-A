@@ -51,7 +51,7 @@ public class Train extends Thread {
 		if(!running && !hasArrived){
 			while (SimulationGUI.getCurrentTime() < startTime){
 				try {
-					sleep(SimulationGUI.TIME_UNIT);
+					sleep(SimulationGUI.timeUnit);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -68,7 +68,7 @@ public class Train extends Thread {
 			}*/
 			while (!hasArrived && running) {
 				try {
-					sleep(SimulationGUI.TIME_UNIT);
+					sleep(SimulationGUI.timeUnit);
 				} catch (InterruptedException e) {
 					System.err.println(e.getMessage());
 				}
@@ -77,7 +77,7 @@ public class Train extends Thread {
 				if(position + distancePerFrame() >= currentStation.getPosition()){
 					position = currentStation.getPosition();
 					try {
-						sleep(SimulationGUI.TIME_UNIT * 3);
+						sleep(SimulationGUI.timeUnit * 3);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
