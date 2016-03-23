@@ -81,6 +81,7 @@ public class Train extends Thread {
 					position = currentStation.getPosition();
 					try {
 						sleep((int)(SimulationGUI.timeUnit * currentStation.getTimeToWait()));
+
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
