@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.event.*;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,6 +8,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,15 +25,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import engine.Canton;
 import engine.Line;
-import engine.TerminusException;
 import engine.Train;
-import engine.Station;
 import engine.TrainSimulator;
 
 
@@ -48,7 +52,9 @@ public class SimulationGUI extends JFrame implements Runnable {
 	private static float currentTime = 0;
 	private static float speed = 1;
 	private static final int SIMULATION_DURATION = 1440;
-	public static final int TIME_UNIT = 50;
+	public static final int TIME_INIT = 100;
+	public static int timeUnit = TIME_INIT;
+	public static int widthScrollBar = Integer.MAX_VALUE;
 	private JLabel browserPath=new JLabel("Chemin à explorer :");
 	private Font font = new Font(Font.MONOSPACED, Font.BOLD, 15);
 
@@ -58,11 +64,10 @@ public class SimulationGUI extends JFrame implements Runnable {
 
 	private HoursPanel trainsHoursPanel = new HoursPanel();
 	private EventsPanel eventsPanel = new EventsPanel();
-	private JPanel managementPanel = new JPanel();
+	private ManagementPanel managementPanel;
 	
+	private JFrame instance = this;
 	private JLabel titleLabel = new JLabel("RER Simulator par \"VAPEUR®\"");
-	private JLabel manageLabel = new JLabel();
-
 
 	ImageIcon hoursIcon = new ImageIcon("./img/icons/hours.png");
 	ImageIcon eventsIcon = new ImageIcon("./img/icons/events.png");
@@ -89,6 +94,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		setSize(400, 100);
 		setResizable(false);
 		setVisible(true);
+		
 	}
 	
 	 public void Exit(){
@@ -107,6 +113,10 @@ public class SimulationGUI extends JFrame implements Runnable {
 	public void init(String fileName) {
 		dashboard = new SimulationDashboard();
 		trainsim = new TrainSimulator(fileName);
+		managementPanel = new ManagementPanel();
+		managementPanel.getZoomSlider().addChangeListener(new ZoomAction());
+		managementPanel.getSpeedSlider().addChangeListener(new SpeedChangingAction());
+
 		dashboard.setLine(trainsim.getLine());
 		dashboard.setReversedLine(trainsim.getReversedLine());
 		wholeFrame.setLayout(new GridBagLayout());
@@ -119,20 +129,23 @@ public class SimulationGUI extends JFrame implements Runnable {
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 1;
 		dashboardScrollPanel = new JScrollPane(dashboard);
-		dashboard.setPreferredSize(new Dimension(dashboard.getLine().getTotallength() + 100, 500));
+
+		dashboard.setPreferredSize(new Dimension(dashboard.getLine().getTotallength()/dashboard.getInitDistance()+150 , 500));
 		dashboardScrollPanel.setPreferredSize(new Dimension(700, 300));
+		System.out.println("widthScrollBar = "+widthScrollBar);
+
+		dashboardScrollPanel.getHorizontalScrollBar().setPreferredSize(new Dimension(widthScrollBar, 20));
 		wholeFrame.add(dashboardScrollPanel, frameConstraints);
 
 		infoTabbedPanel.addTab("Horaires", hoursIcon, trainsHoursPanel,	"Horaires des trains quoi");
 		infoTabbedPanel.addTab("Évènements", eventsIcon, eventsPanel,"Console qui affiche les différents évènements");
 		infoTabbedPanel.addTab("Gestion", manageIcon, managementPanel,"Gestion des trains quoi");		
-		manageLabel.setText("Ici sera situé prochainement la gestion du programme");
-		managementPanel.add(manageLabel);
 		infoTabbedPanel.setPreferredSize(new Dimension(700, 300));
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 2;
 		wholeFrame.add(infoTabbedPanel, frameConstraints);
 		wholeFrame.setPreferredSize(new Dimension(700, 650));
+		
 		this.add(wholeFrame);
 		pack();
 		setVisible(true);
@@ -232,7 +245,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 			
 			
 			try {
-				Thread.sleep(TIME_UNIT);
+				Thread.sleep(timeUnit);
 			} catch (InterruptedException e) {
 				System.err.println(e.getMessage());
 			}
@@ -258,6 +271,9 @@ public class SimulationGUI extends JFrame implements Runnable {
 			}
 		}
 	}
+	
+
+
 	
 	public String Storepath(String storepath){
 		Container contentPane = getContentPane();
@@ -291,7 +307,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		private JTextArea hoursTextArea = new JTextArea();
 		
 		private JScrollPane hoursScrollPanel = new JScrollPane();
-		
+		private JButton updateButton = new JButton("Update");
 
 		public HoursPanel() {
 			super();
@@ -302,7 +318,17 @@ public class SimulationGUI extends JFrame implements Runnable {
 			hoursTextArea.setText("Ici seront affiché prochainement les horaires");
 			hoursTextArea.setEditable(false);
 			hoursScrollPanel = new JScrollPane(hoursTextArea);
-			hoursScrollPanel.setPreferredSize(new Dimension(680, 320));
+			hoursScrollPanel.setPreferredSize(new Dimension(680, 200));
+			updateButton.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					trainsim.UpdateSchedules();
+					hoursTextArea.setText(trainsim.SchedulesToString());
+					
+				}
+			});
+			this.add(updateButton);
 			this.add(hoursScrollPanel);
 		}
 	}
@@ -329,4 +355,34 @@ public class SimulationGUI extends JFrame implements Runnable {
 			this.add(eventsScrollPanel);
 		}
 	}
+
+	private class SpeedChangingAction implements ChangeListener {
+		public void stateChanged(ChangeEvent e) {
+			SimulationGUI.setSpeed((float)((JSlider) e.getSource()).getValue()/10);
+			SimulationGUI.setTimeUnit((int)(SimulationGUI.getTimeInit()/SimulationGUI.getSpeed()));
+		}
+	}
+	
+	private class ZoomAction implements ChangeListener {
+		public void stateChanged(ChangeEvent e) {
+			int newSize = (((JSlider) e.getSource()).getValue());
+			dashboard.setDistancePerPixel(dashboard.getInitDistance()*newSize/ManagementPanel.getZoomInit());
+			dashboard.setPreferredSize(new Dimension(dashboard.getLine().getTotallength()/dashboard.getDistancePerPixel()+150 , 500));		
+	
+			widthScrollBar = (int)(widthScrollBar*((float)newSize/(float)100));
+			dashboardScrollPanel.getHorizontalScrollBar().setPreferredSize(new Dimension(widthScrollBar, 20));
+			instance.repaint();
+		}
+	}
+	
+	public static void setTimeUnit(int timeUnit) {
+		SimulationGUI.timeUnit = timeUnit;
+	}
+
+
+
+	public static int getTimeInit() {
+		return TIME_INIT;
+	}
+
 }

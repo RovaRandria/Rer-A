@@ -1,6 +1,7 @@
 package engine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 //import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class Train extends Thread {
 	private float startTime;
 	private String code;
 	private int speed;
+	private int margin;
 	private boolean hasArrived = false;
 
 	
@@ -51,7 +53,7 @@ public class Train extends Thread {
 		if(!running && !hasArrived){
 			while (SimulationGUI.getCurrentTime() < startTime){
 				try {
-					sleep(SimulationGUI.TIME_UNIT);
+					sleep(SimulationGUI.timeUnit);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -68,16 +70,17 @@ public class Train extends Thread {
 			}*/
 			while (!hasArrived && running) {
 				try {
-					sleep(SimulationGUI.TIME_UNIT);
+					sleep(SimulationGUI.timeUnit);
 				} catch (InterruptedException e) {
 					System.err.println(e.getMessage());
 				}
 				//System.out.println("position : " + getPosition());
 				trainIsComing();
-				if(position + distancePerFrame() >= currentStation.getPosition()){
+				if(position + distanceNextFrame() >= currentStation.getPosition()){
+					margin = position + distancePerFrame() - currentStation.getPosition();
 					position = currentStation.getPosition();
 					try {
-						sleep(SimulationGUI.TIME_UNIT * 3);
+						sleep((int)(SimulationGUI.timeUnit * currentStation.getTimeToWait()));
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -94,10 +97,10 @@ public class Train extends Thread {
 					}
 				}else if (position + distancePerFrame() >= currentCanton.getEndPoint()) {
 					try {
-						System.out.println("Position actuelle : " + position);
+						//System.out.println("Position actuelle : " + position);
 						Canton nextCanton = line.getCantonByPosition(position +  distancePerFrame());
 						nextCanton.enter(this);
-						System.out.println("Position après changement de canton : " + position);
+						//System.out.println("Position après changement de canton : " + position);
 					} catch (TerminusException e) {
 						System.out.println("ON EST SORTI");
 						hasArrived = true;
@@ -131,11 +134,15 @@ public class Train extends Thread {
 	}
 
 	public void updatePosition() {
-		position += distancePerFrame();
+		position += distanceNextFrame();
+		margin = 0;
 	}
 	
 	public int distancePerFrame(){
-		return (int)((float)(speed*100/60) * SimulationGUI.getSpeed());
+		return (int)((float)(speed*100/60));
+	}
+	public int distanceNextFrame(){
+		return distancePerFrame() + margin;
 	}
 	public void setPath(ArrayList<Station> path){
 		this.path = path;
@@ -167,10 +174,39 @@ public class Train extends Thread {
 		if(currentStation != null){
 			int pos =currentStation.getPosition()-getPosition();
 			int arrivalTime=pos/distancePerFrame();
-			System.out.println("Train is coming in:"+arrivalTime);
+			//System.out.println("Train is coming in:"+arrivalTime);
 		}
 	}
 
+	public HashMap<Station, Integer> getSchedules(){
+		HashMap<Station, Integer> schedules = new HashMap<Station,Integer>();
+		float totalTimeStation = 0;
+		if(currentStation != null){
+			schedules.put(currentStation,currentStation.getPosition()-getPosition());
+			totalTimeStation += currentStation.getTimeToWait();
+		}
+		
+		for(int i=0;i<path.size();i++){
+			Station s = path.get(i);
+			System.out.println("--------------");
+			System.out.println(s.getName() + " : ");
+			System.out.println((s.getPosition()-getPosition()) + " / " + distancePerFrame() + " = " + (s.getPosition()-getPosition())/distancePerFrame());
+			System.out.println("+ " + totalTimeStation);
+			System.out.println("+ " + SimulationGUI.getCurrentTime());
+			
+			int time = (int) ((s.getPosition()-getPosition())/distancePerFrame() + totalTimeStation + SimulationGUI.getCurrentTime());
+			if(startTime > SimulationGUI.getCurrentTime()){
+				time += (startTime - SimulationGUI.getCurrentTime());
+				System.out.println("+ " + (startTime - SimulationGUI.getCurrentTime()));
+			}
+			System.out.println("schedule : " + time);
+			schedules.put(s, time);
+			totalTimeStation += s.getTimeToWait();
+		}
+		
+		return schedules;
+		
+	}
 	public int getSpeed() {
 		return speed;
 	}

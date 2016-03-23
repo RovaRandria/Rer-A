@@ -27,8 +27,8 @@ public class SimulationDashboard extends JPanel {
 	private List<Train> trains = new ArrayList<Train>();
 	private static final int START_X = 50;
 	private static final int START_Y = 150;
-	
-	private static final int distancePerPixel = 10;	
+	private final int INIT_DISTANCE = 10;
+	private int distancePerPixel = INIT_DISTANCE;	
 	
 	
 	public SimulationDashboard() {
@@ -128,6 +128,18 @@ public class SimulationDashboard extends JPanel {
 
 	public void setTrains(List<Train> trains) {
 		this.trains = trains;
+	}
+
+	public int getInitDistance() {
+		return INIT_DISTANCE;
+	}
+
+	public void setDistancePerPixel(int distancePerPixel) {
+		this.distancePerPixel = distancePerPixel;
+	}
+
+	public int getDistancePerPixel() {
+		return distancePerPixel;
 	}
 
 }

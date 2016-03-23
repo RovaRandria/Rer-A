@@ -30,7 +30,7 @@ public class Canton {
 
 	public synchronized void enter(Train train) {
 		if (occupyingTrain != null) {
-			System.out.println(toString() + " occupied !");
+			//System.out.println(toString() + " occupied !");
 			// Train stopped just before canton start point !
 			train.setPosition(startPoint - 1);
 			try {
@@ -40,7 +40,7 @@ public class Canton {
 			}
 		}
 
-		System.out.println(toString() + " available !");
+		//System.out.println(toString() + " available !");
 		//System.out.println("Canton changed successfully");
 		Canton oldCanton = train.getCurrentCanton();
 		train.setCurrentCanton(this);
