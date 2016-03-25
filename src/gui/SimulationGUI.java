@@ -32,6 +32,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import engine.Canton;
 import engine.Line;
+import engine.Station;
 import engine.Train;
 import engine.TrainSimulator;
 
@@ -60,7 +61,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 	private JScrollPane dashboardScrollPanel = new JScrollPane();
 	private JTabbedPane infoTabbedPanel = new JTabbedPane();
 
-	private HoursPanel trainsHoursPanel = new HoursPanel();
+	private HoursPanel trainsHoursPanel;
 	private EventsPanel eventsPanel = new EventsPanel();
 	private ManagementPanel managementPanel;
 	
@@ -109,8 +110,9 @@ public class SimulationGUI extends JFrame implements Runnable {
 	}
 
 	public void init(String fileName) {
-		dashboard = new SimulationDashboard();
 		trainsim = new TrainSimulator(fileName);
+		trainsHoursPanel = new HoursPanel(trainsim);
+		dashboard = new SimulationDashboard(trainsHoursPanel);
 		managementPanel = new ManagementPanel();
 		managementPanel.getZoomSlider().addChangeListener(new ZoomAction());
 		managementPanel.getSpeedSlider().addChangeListener(new SpeedChangingAction());
@@ -157,7 +159,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		Line reversedLine = trainsim.getReversedLine();
 		Canton firstCanton = line.getCantons().get(0);
 
-		/*
+		
 		Train newTrain = new Train(line, firstCanton, 5, "QYEN", 0);
 		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
@@ -196,7 +198,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		newTrain = new Train(line, firstCanton, 5, "QYEN", 150);
 		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
-		newTrain.start();*/
+		newTrain.start();
 		
 		String fileName= SimulationGUI.class.getResource("/trains.txt").getPath();
 		String str1[] = null;
@@ -209,14 +211,14 @@ public class SimulationGUI extends JFrame implements Runnable {
 				
 					if(str1[0].equals("line")){
 				
-						Train newTrain = new Train(line, firstCanton,Integer.parseInt(str1[1]),str1[2], Integer.parseInt(str1[3]));
+						newTrain = new Train(line, firstCanton,Integer.parseInt(str1[1]),str1[2], Integer.parseInt(str1[3]));
 						trainsim.addTrain(newTrain);
 						newTrain.setPath(line.getFullPath());
 						newTrain.start();
 					}
 					else if(str1[0].equals("reversedLine")){
 			
-						Train newTrain = new Train(trainsim.getReversedLine(), reversedLine.getCanton(0),Integer.parseInt(str1[1]),str1[2], Integer.parseInt(str1[3]));
+						newTrain = new Train(trainsim.getReversedLine(), reversedLine.getCanton(0),Integer.parseInt(str1[1]),str1[2], Integer.parseInt(str1[3]));
 						trainsim.addTrain(newTrain);
 						newTrain.setPath(trainsim.getReversedLine().getFullPath());
 						newTrain.start();
@@ -298,38 +300,6 @@ public class SimulationGUI extends JFrame implements Runnable {
 		SimulationGUI.speed = speed;
 	}
 
-	private class HoursPanel extends JPanel {
-
-		private static final long serialVersionUID = 1L;
-
-		private JTextArea hoursTextArea = new JTextArea();
-		
-		private JScrollPane hoursScrollPanel = new JScrollPane();
-		private JButton updateButton = new JButton("Update");
-
-		public HoursPanel() {
-			super();
-			init();
-		}
-
-		public void init() {
-			hoursTextArea.setText("Ici seront affiché prochainement les horaires");
-			hoursTextArea.setEditable(false);
-			hoursScrollPanel = new JScrollPane(hoursTextArea);
-			hoursScrollPanel.setPreferredSize(new Dimension(680, 200));
-			updateButton.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					trainsim.UpdateSchedules();
-					hoursTextArea.setText(trainsim.SchedulesToString());
-					
-				}
-			});
-			this.add(updateButton);
-			this.add(hoursScrollPanel);
-		}
-	}
 	private class EventsPanel extends JPanel {
 
 		private static final long serialVersionUID = 1L;
