@@ -24,8 +24,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -61,8 +63,8 @@ public class SimulationGUI extends JFrame implements Runnable {
 	private JScrollPane dashboardScrollPanel = new JScrollPane();
 	private JTabbedPane infoTabbedPanel = new JTabbedPane();
 
-	private HoursPanel trainsHoursPanel;
 	private EventsPanel eventsPanel = new EventsPanel();
+	private HoursPanel trainsHoursPanel;
 	private ManagementPanel managementPanel;
 	
 	private JFrame instance = this;
@@ -116,6 +118,8 @@ public class SimulationGUI extends JFrame implements Runnable {
 		managementPanel = new ManagementPanel();
 		managementPanel.getZoomSlider().addChangeListener(new ZoomAction());
 		managementPanel.getSpeedSlider().addChangeListener(new SpeedChangingAction());
+		
+		eventsPanel = new EventsPanel();
 
 		dashboard.setLine(trainsim.getLine());
 		dashboard.setReversedLine(trainsim.getReversedLine());
@@ -160,7 +164,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		Canton firstCanton = line.getCantons().get(0);
 
 		
-		Train newTrain = new Train(line, firstCanton, 5, "QYEN", 0);
+		/*Train newTrain = new Train(line, firstCanton, 5, "QYEN", 0);
 		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
 		newTrain.start();
@@ -198,27 +202,30 @@ public class SimulationGUI extends JFrame implements Runnable {
 		newTrain = new Train(line, firstCanton, 5, "QYEN", 150);
 		trainsim.addTrain(newTrain);
 		newTrain.setPath(line.getFullPath());
-		newTrain.start();
+		newTrain.start();*/
 		
-		String fileName= SimulationGUI.class.getResource("/trains.txt").getPath();
+		//String fileName= SimulationGUI.class.getResource("/trains.txt").getPath();
+		
 		String str1[] = null;
 		String l;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			
+			BufferedReader br = new BufferedReader(new FileReader("./src/trains.txt"));
 			while ((l = br.readLine()) != null) {
+				
 				String separator1="\\|";
 				str1=l.split(separator1);
 				
 					if(str1[0].equals("line")){
 				
-						newTrain = new Train(line, firstCanton,Integer.parseInt(str1[1]),str1[2], Integer.parseInt(str1[3]));
+						Train newTrain = new Train(line, firstCanton,Integer.parseInt(str1[1]),str1[2], Integer.parseInt(str1[3]));
 						trainsim.addTrain(newTrain);
 						newTrain.setPath(line.getFullPath());
 						newTrain.start();
 					}
 					else if(str1[0].equals("reversedLine")){
 			
-						newTrain = new Train(trainsim.getReversedLine(), reversedLine.getCanton(0),Integer.parseInt(str1[1]),str1[2], Integer.parseInt(str1[3]));
+						Train newTrain = new Train(trainsim.getReversedLine(), reversedLine.getCanton(0),Integer.parseInt(str1[1]),str1[2], Integer.parseInt(str1[3]));
 						trainsim.addTrain(newTrain);
 						newTrain.setPath(trainsim.getReversedLine().getFullPath());
 						newTrain.start();
@@ -240,6 +247,10 @@ public class SimulationGUI extends JFrame implements Runnable {
 
 
 		while (currentTime <= SIMULATION_DURATION) {
+			if(trainsHoursPanel.isCurrentPan()) {
+				infoTabbedPanel.setSelectedIndex(0);
+				trainsHoursPanel.setCurrentPan(false);
+			}
 			dashboard.setTrains(trainsim.getTrains());
 			dashboard.repaint();
 			
@@ -298,30 +309,6 @@ public class SimulationGUI extends JFrame implements Runnable {
 
 	public static void setSpeed(float speed) {
 		SimulationGUI.speed = speed;
-	}
-
-	private class EventsPanel extends JPanel {
-
-		private static final long serialVersionUID = 1L;
-
-		private JTextArea eventsTextArea = new JTextArea();		
-
-		private JScrollPane eventsScrollPanel = new JScrollPane();
-
-		public EventsPanel() {
-			super();
-			init();
-		}
-		
-
-		
-		public void init() {
-			eventsTextArea.setText("Ici seront affiché prochainement les évènements");
-			eventsTextArea.setEditable(false);
-			eventsScrollPanel = new JScrollPane(eventsTextArea);
-			eventsScrollPanel.setPreferredSize(new Dimension(680, 320));
-			this.add(eventsScrollPanel);
-		}
 	}
 
 	private class SpeedChangingAction implements ChangeListener {

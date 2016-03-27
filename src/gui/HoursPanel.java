@@ -26,6 +26,7 @@ public class HoursPanel extends JPanel {
 	private JScrollPane jsp1 = new JScrollPane();
 	private JScrollPane jsp2 = new JScrollPane();
 	private TrainSimulator trainsim;
+	private boolean currentPan = true;
 
 	public HoursPanel(TrainSimulator trainsim) {
 		super();
@@ -53,6 +54,14 @@ public class HoursPanel extends JPanel {
 		this.add(new JLabel("Direction Cergy"));
 		this.add(jsp1);
 		this.add(jsp2);
+	}
+
+	public boolean isCurrentPan() {
+		return currentPan;
+	}
+
+	public void setCurrentPan(boolean currentPan) {
+		this.currentPan = currentPan;
 	}
 
 }

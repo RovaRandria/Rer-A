@@ -49,7 +49,6 @@ public class TrainSimulator {
 			Iterator<Entry<Station, Integer>> it = t.getSchedules().entrySet().iterator();
 			while(it.hasNext()){
 				Entry<Station, Integer> next = it.next();
-				System.out.println(next.getKey());
 				schedules.get(next.getKey()).add(next.getValue());
 			}
 		}

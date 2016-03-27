@@ -69,6 +69,7 @@ public class SimulationDashboard extends JPanel {
 					for(Station s : sta) {
 						if(e.getX()-START_X >= s.getPosition()/distancePerPixel-10 && e.getX()-START_X <= s.getPosition()/distancePerPixel+10) {
 							hourpan.setStation(s);
+							hourpan.setCurrentPan(true);
 							break;
 						}
 					}
@@ -78,6 +79,7 @@ public class SimulationDashboard extends JPanel {
 					for(Station s : sta) {
 						if(e.getX()-START_X >= s.getPosition()/distancePerPixel-10 && e.getX()-START_X <= s.getPosition()/distancePerPixel+10) {
 							hourpan.setStation(s);
+							hourpan.setCurrentPan(true);
 							break;
 						}
 					}
