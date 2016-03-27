@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -60,6 +61,8 @@ public class SimulationGUI extends JFrame implements Runnable {
 	public static int widthScrollBar = Integer.MAX_VALUE;
 	private JLabel browserPath=new JLabel("Chemin à explorer :");
 	private Font font = new Font(Font.MONOSPACED, Font.BOLD, 15);
+	private Font titleFont = new Font("Arial", Font.BOLD, 28);
+	private Font hourFont = new Font("Arial", Font.BOLD, 20);
 
 	private JPanel wholeFrame = new JPanel();
 	private JScrollPane dashboardScrollPanel = new JScrollPane();
@@ -71,11 +74,13 @@ public class SimulationGUI extends JFrame implements Runnable {
 	private JFrame instance = this;
 	private JLabel titleLabel = new JLabel("RER Simulator par \"VAPEUR®\"");
 
+	private JPanel hourPanel = new JPanel();
+	private JLabel hourLabel;
+	
 	ImageIcon hoursIcon = new ImageIcon("./img/icons/hours.png");
 	ImageIcon eventsIcon = new ImageIcon("./img/icons/events.png");
 	ImageIcon manageIcon = new ImageIcon("./img/icons/manage.png");
 	
-
 	public SimulationGUI(String fileName) {
 		super("Train simulation");
 		init(fileName);
@@ -119,37 +124,38 @@ public class SimulationGUI extends JFrame implements Runnable {
 		managementPanel = new ManagementPanel();
 		managementPanel.getZoomSlider().addChangeListener(new ZoomAction());
 		managementPanel.getSpeedSlider().addChangeListener(new SpeedChangingAction());
-		
 		eventsPanel = new EventsPanel();
+		hourLabel = new JLabel("0h00");
+		hourLabel.setFont(hourFont);
+		hourPanel.add(hourLabel);
 
 		dashboard.setLine(trainsim.getLine());
 		dashboard.setReversedLine(trainsim.getReversedLine());
 		wholeFrame.setLayout(new GridBagLayout());
 		GridBagConstraints frameConstraints = new GridBagConstraints();
 		Font font = new Font("Arial",Font.BOLD,40);
-		titleLabel.setFont(font);
+		titleLabel.setFont(titleFont);
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 0;
+		frameConstraints.insets = new Insets(20,0,20,0);
 		wholeFrame.add(titleLabel, frameConstraints);
-		frameConstraints.gridx = 0;
-		frameConstraints.gridy = 1;
+		frameConstraints.gridy = GridBagConstraints.RELATIVE;
+		frameConstraints.insets = new Insets(5,0,5,0);
 		dashboardScrollPanel = new JScrollPane(dashboard);
 
-		dashboard.setPreferredSize(new Dimension(dashboard.getLine().getTotallength()/dashboard.getInitDistance()+150 , 500));
+		dashboard.setPreferredSize(new Dimension(dashboard.getLine().getTotallength()/dashboard.getInitDistance()+150 , 370));
 		dashboardScrollPanel.setPreferredSize(new Dimension(700, 300));
-		System.out.println("widthScrollBar = "+widthScrollBar);
 
 		dashboardScrollPanel.getHorizontalScrollBar().setPreferredSize(new Dimension(widthScrollBar, 20));
 		wholeFrame.add(dashboardScrollPanel, frameConstraints);
-
+		wholeFrame.add(hourPanel, frameConstraints);
+		
 		infoTabbedPanel.addTab("Horaires", hoursIcon, trainsHoursPanel,	"Horaires des trains quoi");
 		infoTabbedPanel.addTab("Évènements", eventsIcon, eventsPanel,"Console qui affiche les différents évènements");
 		infoTabbedPanel.addTab("Gestion", manageIcon, managementPanel,"Gestion des trains quoi");		
 		infoTabbedPanel.setPreferredSize(new Dimension(700, 300));
-		frameConstraints.gridx = 0;
-		frameConstraints.gridy = 2;
 		wholeFrame.add(infoTabbedPanel, frameConstraints);
-		wholeFrame.setPreferredSize(new Dimension(700, 650));
+		wholeFrame.setPreferredSize(new Dimension(700, 750));
 		
 		this.add(wholeFrame);
 		pack();
@@ -229,6 +235,8 @@ public class SimulationGUI extends JFrame implements Runnable {
 
 
 		while (currentTime <= SIMULATION_DURATION) {
+			int time = (int)SimulationGUI.getCurrentTime();
+			hourLabel.setText((((time)/60<10)?"0":"") +(time)/60 + "h"+((time%60<10)?"0":"") + (time%60));
 			if(trainsHoursPanel.isCurrentPan()) {
 				infoTabbedPanel.setSelectedIndex(0);
 				trainsHoursPanel.setCurrentPan(false);
@@ -238,6 +246,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 			
 			managementPanel.updateTrainList(trainsim.getTrains());
 			managementPanel.repaint();
+			hourPanel.repaint();
 			try {
 				Thread.sleep(timeUnit);
 			} catch (InterruptedException e) {
@@ -322,5 +331,6 @@ public class SimulationGUI extends JFrame implements Runnable {
 	public static int getTimeInit() {
 		return TIME_INIT;
 	}
+
 
 }

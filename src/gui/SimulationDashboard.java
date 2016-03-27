@@ -10,11 +10,11 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import engine.Canton;
 import engine.Line;
-import engine.LineBuilder;
 import engine.Station;
 import engine.Train;
 
@@ -28,7 +28,7 @@ public class SimulationDashboard extends JPanel {
 	private Line reversedLine;
 	private List<Train> trains = new ArrayList<Train>();
 	private static final int START_X = 50;
-	private static final int START_Y = 150;
+	private static final int START_Y = 100;
 	private final int INIT_DISTANCE = 10;
 	private int distancePerPixel = INIT_DISTANCE;
 	private HoursPanel hourpan;
@@ -99,9 +99,6 @@ public class SimulationDashboard extends JPanel {
 		printLine(line, START_X, START_Y, g2);
 		printLine(reversedLine, START_X, START_Y + 150, g2);
 		printTrains(START_X, START_Y, g2);
-		int time = (int)SimulationGUI.getCurrentTime();
-		g2.drawString((time)/60 + "h"+((time%60<10)?"0":"") + (time%60), 330, START_Y - 75);
-		
 	}
 
 	private void printLine(Line line, int startX, int startY, Graphics2D g2) {
