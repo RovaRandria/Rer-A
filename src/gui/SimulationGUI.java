@@ -61,7 +61,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 	private JPanel wholeFrame = new JPanel();
 	private JScrollPane dashboardScrollPanel = new JScrollPane();
 	private JTabbedPane infoTabbedPanel = new JTabbedPane();
-
+	
 	private HoursPanel trainsHoursPanel = new HoursPanel();
 	private EventsPanel eventsPanel;
 	private ManagementPanel managementPanel;
