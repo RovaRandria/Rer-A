@@ -1,2 +1,4 @@
 Cantons:4100|90,120,100,135,50,50,150,50,50,60,40,90,80,75,65,80,100,100,50,50,80,80,65,50,60,90,130,70,100,75,25,100,100,100,200,100,25,100,75,100,100,50,50,50,50,100,90,100,100,100,
 Stations:Cergy-Le-Haut,0|Cergy-Saint-Christophe,100|Cergy-Prefecture,200|Neuville-Université,300|Conflans-Fin d'Oise,400|Achères-Ville,500|Maison-Laffitte,600|Sartrouville,700|Houilles Carrières-sur-Seine,800|Nanterre-Préfecture,1000|La Défense,1150|Charles de Gaulle-Étoile,1500|Auber,1700|Châtelet-Les Halles,2000|Gare de Lyon,2200|Nation,2500|Vincennes,2700|Val de Fontenay,3100|Neuilly-Plaisance,3200|Bry-sur-Marne,3250|Noisy-le-Grand Mont d'Est,3350|Noisy-Champs,3500|Noisiel,3600|Lognes,3700|Torcy,3800|Bussy-Saint-Georges,3900|Val d'Europe,4000|Marne-La-Vallée Chessy,4100
+Patterns:QYEN|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+Patterns:TOBY|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1

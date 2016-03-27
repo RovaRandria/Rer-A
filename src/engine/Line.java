@@ -1,6 +1,7 @@
 package engine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -11,6 +12,7 @@ public class Line {
 
 	private List<Canton> cantons = new ArrayList<Canton>();
 	private ArrayList<Station> stations = new ArrayList<Station>();
+	private HashMap<String,TrainPattern> patterns = new HashMap<String,TrainPattern>();
 	
 	public Line(int totallength) {
 		this.totallength = totallength;
@@ -87,5 +89,13 @@ public class Line {
 		
 		
 		return reversedLine;
+	}
+
+	public HashMap<String,TrainPattern> getPatterns() {
+		return patterns;
+	}
+
+	public void setPatterns(HashMap<String,TrainPattern> patterns) {
+		this.patterns = patterns;
 	}
 }

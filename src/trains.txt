@@ -1,1 +1,2 @@
-line|100|QYEN|60
+line|100|QYEN|60|
+reversedLine|100|TOBY|50

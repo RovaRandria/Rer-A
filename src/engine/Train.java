@@ -22,10 +22,11 @@ public class Train extends Thread {
 	private boolean hasArrived = false;
 
 	
-	public Train(Line line, Canton startCanton, int speed, String code, float startTime) {
+	public Train(Line line, Canton startCanton, int speed, TrainPattern trainPattern, float startTime) {
 		this.line = line;
 		this.speed = speed;
-		this.code = code;
+		this.code = trainPattern.getPatternCode();
+		this.path = trainPattern.getPattern();
 		this.startTime = startTime;
 		running = false;
 		currentCanton = startCanton;
