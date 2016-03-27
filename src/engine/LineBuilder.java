@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -51,7 +52,7 @@ public class LineBuilder {
 		line.addStation("Sartrouville", 450);
 		line.addStation("Marne-La-Vall�e", 600);
 		*/
-		
+		HashMap<String,TrainPattern> patterns = new HashMap<String,TrainPattern>();
 		String l;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -76,9 +77,34 @@ public class LineBuilder {
 					int j=0;
 					while(j<str2.length){
 						String str3[]=str2[j].split(separator3);
-						line.addStation(str3[0],Integer.parseInt(str3[1]));
+						System.out.println(str2[j]);
+						String stationName = str3[0];
+						System.out.println(stationName);
+						int stationPos = Integer.parseInt(str3[1]);
+						System.out.println(stationPos);
+						line.addStation(stationName, stationPos);
 						j++;
 					}
+				}
+				else if(str1[0].equals("Patterns")){
+					String str2[]=str1[1].split(separator2);
+					System.out.println("COD : " +str2[0]);
+					String code=str2[0];
+					ArrayList<Integer> al=new ArrayList<Integer>();
+					String str3[]=str2[1].split(separator3);
+					for(int i=0;i<str3.length;i++){
+						al.add(Integer.parseInt(str3[i]));
+					}
+					ArrayList<Station> newPath= new ArrayList<Station>();
+					for(int i=0;i<al.size();i++){
+						if(al.get(i)==1){
+							newPath.add(line.getStations().get(i));
+						}
+					}
+					TrainPattern tp= new TrainPattern(code,newPath);
+					System.out.println(code);
+					patterns.put(code,tp);
+					line.setPatterns(patterns);
 				}
 			}
 			br.close();

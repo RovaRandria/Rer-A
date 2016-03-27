@@ -44,7 +44,9 @@ public class TrainSimulator {
 		for(Station s : line.getStations()){
 			schedules.put(s, new ArrayList<Integer>());
 		}
-		
+		for(Station s : reversedLine.getStations()){
+			schedules.put(s, new ArrayList<Integer>());
+		}
 		for(Train t : trains){
 			Iterator<Entry<Station, Integer>> it = t.getSchedules().entrySet().iterator();
 			while(it.hasNext()){
@@ -66,6 +68,18 @@ public class TrainSimulator {
 			}
 			scheduleStr += str+"\n";
 		}
+		return scheduleStr;
+	}
+	
+	public String SchedulesToString(Station s){
+		//Iterator<Entry<Station, ArrayList<Integer>>> it = schedules.entrySet().iterator();
+		String scheduleStr = "Horaires :\n";
+		String str = s.getName() + " : ";
+		for(int time : schedules.get(s)){
+			str += (time)/60 + "h"+((time%60<10)?"0":"") + (time%60) + " | ";
+			//str += time + " | ";
+		}
+		scheduleStr += str+"\n";
 		return scheduleStr;
 	}
 	

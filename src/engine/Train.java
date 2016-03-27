@@ -22,10 +22,11 @@ public class Train extends Thread {
 	private boolean hasArrived = false;
 
 	
-	public Train(Line line, Canton startCanton, int speed, String code, float startTime) {
+	public Train(Line line, Canton startCanton, int speed, TrainPattern trainPattern, float startTime) {
 		this.line = line;
 		this.speed = speed;
-		this.code = code;
+		this.code = trainPattern.getPatternCode();
+		this.path = trainPattern.getPattern();
 		this.startTime = startTime;
 		running = false;
 		currentCanton = startCanton;
@@ -69,13 +70,7 @@ public class Train extends Thread {
 				e1.printStackTrace();
 			}*/
 			while (!hasArrived && running) {
-				try {
-					sleep(SimulationGUI.timeUnit);
-				} catch (InterruptedException e) {
-					System.err.println(e.getMessage());
-				}
 				//System.out.println("position : " + getPosition());
-				trainIsComing();
 				if(position + distanceNextFrame() >= currentStation.getPosition()){
 					margin = position + distancePerFrame() - currentStation.getPosition();
 					position = currentStation.getPosition();
@@ -113,6 +108,11 @@ public class Train extends Thread {
 					
 				
 					updatePosition();
+				}
+				try {
+					sleep(SimulationGUI.timeUnit);
+				} catch (InterruptedException e) {
+					System.err.println(e.getMessage());
 				}
 			}
 		}
@@ -171,13 +171,6 @@ public class Train extends Thread {
 		return line;
 	}
 
-	public void trainIsComing(){
-		if(currentStation != null){
-			int pos =currentStation.getPosition()-getPosition();
-			int arrivalTime=pos/distancePerFrame();
-			//System.out.println("Train is coming in:"+arrivalTime);
-		}
-	}
 
 	public HashMap<Station, Integer> getSchedules(){
 		HashMap<Station, Integer> schedules = new HashMap<Station,Integer>();
@@ -214,6 +207,14 @@ public class Train extends Thread {
 
 	public void setSpeed(int speed) {
 		this.speed = speed;
+	}
+
+	public Station getCurrentStation() {
+		return currentStation;
+	}
+
+	public void setCurrentStation(Station currentStation) {
+		this.currentStation = currentStation;
 	}
 	
 }

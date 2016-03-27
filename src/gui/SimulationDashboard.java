@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +30,62 @@ public class SimulationDashboard extends JPanel {
 	private static final int START_X = 50;
 	private static final int START_Y = 150;
 	private final int INIT_DISTANCE = 10;
-	private int distancePerPixel = INIT_DISTANCE;	
+	private int distancePerPixel = INIT_DISTANCE;
+	private HoursPanel hourpan;
 	
 	
-	public SimulationDashboard() {
-		
+	public SimulationDashboard(final HoursPanel hourpan) {
+		this.hourpan = hourpan;
+		this.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getY() >= START_Y-10 && e.getY() <= START_Y+10) {
+					List<Station> sta = line.getStations();
+					for(Station s : sta) {
+						if(e.getX()-START_X >= s.getPosition()/distancePerPixel-10 && e.getX()-START_X <= s.getPosition()/distancePerPixel+10) {
+							hourpan.setStation(s);
+							hourpan.setCurrentPan(true);
+							break;
+						}
+					}
+				}
+				else if(e.getY() >= START_Y+140 && e.getY() <= START_Y+160) {
+					List<Station> sta = reversedLine.getStations();
+					for(Station s : sta) {
+						if(e.getX()-START_X >= s.getPosition()/distancePerPixel-10 && e.getX()-START_X <= s.getPosition()/distancePerPixel+10) {
+							hourpan.setStation(s);
+							hourpan.setCurrentPan(true);
+							break;
+						}
+					}
+				}
+			}
+		});
 	}
 
 	public void setReversedLine(Line reversedLine) {
@@ -47,7 +100,7 @@ public class SimulationDashboard extends JPanel {
 		printLine(reversedLine, START_X, START_Y + 150, g2);
 		printTrains(START_X, START_Y, g2);
 		int time = (int)SimulationGUI.getCurrentTime();
-		g2.drawString((time+1)/60 + "h"+((time%60<10)?"0":"") + (time%60), 330, START_Y - 75);
+		g2.drawString((time)/60 + "h"+((time%60<10)?"0":"") + (time%60), 330, START_Y - 75);
 		
 	}
 

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -16,6 +17,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+
+import engine.Train;
 
 public class ManagementPanel extends JPanel{
 	
@@ -105,9 +108,24 @@ public class ManagementPanel extends JPanel{
 		this.add(footerPanel);
 	}
 	
+	public void updateTrainList(ArrayList<Train> trains){
+		trainsList.removeAll();
+		DefaultListModel listModel = new DefaultListModel();
+		System.out.println("-----------------------------\nMise à jour des trains");
+		for(Train t : trains){
+			String stationName = "didn't start";
+			if(t.getCurrentStation() != null)
+				stationName = t.getCurrentStation().getName();
+			listModel.addElement(t.getCode() + "("+stationName+")");
+			System.out.println(t.getCode()+ "("+stationName+")");
+		}
+		trainsList.setModel(listModel);
+		trainsList.repaint();
+	}
+	
 	public static List<Integer> hoursList() {
 		List <Integer> hours = new ArrayList<Integer>();
-		for (int i = 1; i <= 24; i++) {
+		for (int i = 0; i < 24; i++) {
 			hours.add(i);
 		}
 		return hours;
@@ -115,7 +133,7 @@ public class ManagementPanel extends JPanel{
 	
 	public static List<Integer> minutesList() {
 		List <Integer> minutes = new ArrayList<Integer>();
-		for (int i = 1; i <= 60; i++) {
+		for (int i = 0; i < 60; i++) {
 			minutes.add(i);
 		}
 		return minutes;
