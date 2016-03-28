@@ -51,6 +51,10 @@ public class ManagementPanel extends JPanel{
 	private JPanel headerPanel = new JPanel();
 	private JPanel footerPanel = new JPanel();
 	
+	private JLabel browserPath=new JLabel("Modifier la ligne :");
+	
+	private JButton pathValue=new JButton("Parcourir");
+	
 	public ManagementPanel(){
 		init();
 	}
@@ -85,7 +89,7 @@ public class ManagementPanel extends JPanel{
 		frameConstraints.insets = new Insets(10, 5, 10, 100);
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 0;
-		frameConstraints.gridheight = 3;
+		frameConstraints.gridheight = 5;
 		footerPanel.add(trainsListScroller, frameConstraints);
 		frameConstraints.gridx = 1;
 		frameConstraints.gridheight = 1;
@@ -101,8 +105,14 @@ public class ManagementPanel extends JPanel{
 		frameConstraints.gridy = 1;
 		frameConstraints.gridx = 1;
 		frameConstraints.gridwidth = 5;
-		frameConstraints.insets = new Insets(5, 5, 10, 5);
+		frameConstraints.insets = new Insets(5, 5, 5, 5);
 		footerPanel.add(addTrainButton, frameConstraints);
+		frameConstraints.gridy = 2;
+		frameConstraints.gridx = 1;
+		footerPanel.add(browserPath, frameConstraints);
+		frameConstraints.gridy = 3;
+		frameConstraints.gridx = 1;
+		footerPanel.add(pathValue, frameConstraints);
 		
 		this.add(headerPanel);
 		this.add(footerPanel);
@@ -150,5 +160,14 @@ public class ManagementPanel extends JPanel{
 	public static int getZoomInit() {
 		return ZOOM_INIT;
 	}
+
+	public JButton getPathValue() {
+		return pathValue;
+	}
+
+	public void setPathValue(JButton pathValue) {
+		this.pathValue = pathValue;
+	}
+	
 
 }

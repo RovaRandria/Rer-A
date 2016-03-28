@@ -86,22 +86,12 @@ public class SimulationGUI extends JFrame implements Runnable {
 		init(fileName);
 		setVisible(true);
 		Exit();
-	}
-	
+	}	
 
-	 
 	public SimulationGUI() {
-		Container contentPane = getContentPane();
-		contentPane.setLayout(new FlowLayout(3,20,20));
-		browserPath.setFont(font);
-		contentPane.add(browserPath);
-		pathValue.setFont(font);
-		pathValue.addActionListener(new PathBrowserAction());
-		contentPane.add(pathValue);
-		setSize(400, 100);
-		setResizable(false);
-		setVisible(true);
-		
+		SimulationGUI simulationGUI = new SimulationGUI("./test-Rer.txt");
+		Thread simulationThread = new Thread(simulationGUI);
+		simulationThread.start();
 	}
 	
 	 public void Exit(){
@@ -114,7 +104,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 	   }
 
 	public static void main(String[] args) {
-		SimulationGUI simulationGUI = new SimulationGUI();
+		new SimulationGUI();
 	}
 
 	public void init(String fileName) {
@@ -156,6 +146,8 @@ public class SimulationGUI extends JFrame implements Runnable {
 		infoTabbedPanel.setPreferredSize(new Dimension(700, 300));
 		wholeFrame.add(infoTabbedPanel, frameConstraints);
 		wholeFrame.setPreferredSize(new Dimension(700, 750));
+		
+		managementPanel.getPathValue().addActionListener(new PathBrowserAction());
 		
 		this.add(wholeFrame);
 		pack();
@@ -268,8 +260,8 @@ public class SimulationGUI extends JFrame implements Runnable {
 			path=Storepath(path);
 			if(!path.equals("")){
 				setVisible(false);
-			SimulationGUI simulationGUI2 = new SimulationGUI(path);
-			Thread simulationThread = new Thread(simulationGUI2);
+			SimulationGUI simulationGUI = new SimulationGUI(path);
+			Thread simulationThread = new Thread(simulationGUI);
 			simulationThread.start();
 			}
 		}
