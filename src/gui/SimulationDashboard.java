@@ -129,6 +129,7 @@ public class SimulationDashboard extends JPanel {
 				drawStation(startX, startY, g2, line.getStations().get(i), startY+60);
 			i++;
 		}
+		
 	}
 	
 

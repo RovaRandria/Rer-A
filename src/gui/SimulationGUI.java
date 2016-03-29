@@ -36,7 +36,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import engine.Canton;
 import engine.Line;
-import engine.Station;
 import engine.Train;
 import engine.TrainPattern;
 import engine.TrainSimulator;
@@ -162,7 +161,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		Line line = trainsim.getLine();
 		Line reversedLine = trainsim.getReversedLine();
 		Canton firstCanton = line.getCantons().get(0);
-		ArrayList<Station> newPath = new ArrayList<Station>();
+		Train newTrain=null;
 		
 		String str1[] = null;
 		String l;
@@ -172,45 +171,23 @@ public class SimulationGUI extends JFrame implements Runnable {
 			while ((l = br.readLine()) != null) {
 				
 				String separator1="\\|";
-				String separator2="\\,";
 				str1=l.split(separator1);
-			
-				/*
-					ArrayList<Integer> al=new ArrayList<Integer>();
-					str2=str1[4].split(separator2);
-					for(int i=0;i<str2.length;i++){
-						al.add(Integer.parseInt(str2[i]));
-					}
-				*/
-					if(str1[0].equals("line")){
-						System.out.println("Pattern:");
-						System.out.println("Pattern"+line.getPatterns().toString());
-						TrainPattern tp = line.getPatterns().get(str1[2]);
-						System.out.println(str1[0]+str1[1]+str1[2]+str1[3]);
-						Train newTrain = new Train(line, firstCanton,Integer.parseInt(str1[1]),tp, Integer.parseInt(str1[3]));
-						trainsim.addTrain(newTrain);
-
-						/*
-						tp=tp.createPattern(line, al, str1[5]);
-						line.getPatterns().put(str1[5], tp);
-						newPath=tp.getPattern();
-						newTrain.setPath(newPath);*/
-						newTrain.start();
-					}
-					else if(str1[0].equals("reversedLine")){
-						//System.out.println(str1[0]+str1[1]+str1[2]+str1[3]);
-						System.out.println("Pattern:");
-						System.out.println("Pattern"+line.getPatterns().toString());
-						TrainPattern tp = line.getPatterns().get(str1[2]);
-						Train newTrain = new Train(trainsim.getReversedLine(), reversedLine.getCanton(0),Integer.parseInt(str1[1]),tp, Integer.parseInt(str1[3]));
-						trainsim.addTrain(newTrain);
-					/*	tp=tp.createPattern(trainsim.getReversedLine(), al, str1[5]);
-						trainsim.getReversedLine().getPatterns().put(str1[5], tp);
-						newPath=tp.getPattern();
-						newTrain.setPath(newPath);*/
-						newTrain.start();
-					}
-					}
+						
+				System.out.println("Pattern:");
+				System.out.println("Pattern"+line.getPatterns().toString());
+				TrainPattern tp = line.getPatterns().get(str1[1]);
+				if(!tp.getReversed()){
+					System.out.println("Normal train created");
+					newTrain = new Train(line, firstCanton,Integer.parseInt(str1[0]),tp, Integer.parseInt(str1[2]));
+				}
+				else{
+					System.out.println("Reversed train created");
+					newTrain = new Train(trainsim.getReversedLine(), reversedLine.getCanton(0),Integer.parseInt(str1[0]),tp, Integer.parseInt(str1[2]));
+				}
+				trainsim.addTrain(newTrain);
+				newTrain.start();
+				
+			}
 			
 			br.close();
 		} catch (FileNotFoundException e) {
@@ -221,9 +198,6 @@ public class SimulationGUI extends JFrame implements Runnable {
 		catch(NullPointerException ee){
 			System.out.println("Fichier entré incorrect");
 		}
-		
-
-		System.out.println(line.getPatterns().toString()+trainsim.getReversedLine().getPatterns().toString());
 
 
 		while (currentTime <= SIMULATION_DURATION) {

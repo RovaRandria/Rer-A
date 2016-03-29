@@ -16,8 +16,7 @@ public class TrainSimulator {
 		LineBuilder lineBuilder = new LineBuilder();
 		lineBuilder.buildLine(fileName);
 		line = lineBuilder.getBuiltLine();
-		if(line != null)
-			reversedLine = line.getReversedLine();
+		reversedLine = lineBuilder.getBuiltReversedLine();
 		this.trains = new ArrayList<Train>();
 		schedules = new HashMap<Station, ArrayList<Integer>>();
 	}

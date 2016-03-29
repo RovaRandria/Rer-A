@@ -1,5 +1,5 @@
 ﻿
 Cantons:42900|900,1200,1000,1000,500,500,1500,500,500,600,800,900,800,800,600,800,1000,1000,500,500,800,800,700,500,600,900,1300,700,1000,700,600,1000,1000,1000,2000,1000,800,1000,700,1000,1000,500,500,1000,1000,1000,900,1000,1000,1000,
 Stations:Cergy-Le-Haut,0|Cergy-Saint-Christophe,1500|Cergy-Prefecture,2000|Neuville-Université,3000|Conflans-Fin d'Oise,4000|Achères-Ville,5000|Maison-Laffitte,6000|Sartrouville,7000|Houilles Carrières-sur-Seine,8000|Nanterre-Préfecture,10000|La Défense,11500|Charles de Gaulle-Étoile,15000|Auber,17000|Châtelet-Les Halles,20000|Gare de Lyon,22000|Nation,25000|Vincennes,27000|Val de Fontenay,31000|Neuilly-Plaisance,32000|Bry-sur-Marne,32500|Noisy-le-Grand Mont d'Est,33500|Noisy-Champs,35000|Noisiel,36000|Lognes,37000|Torcy,38000|Bussy-Saint-Georges,39500|Val d'Europe,41000|Marne-La-Vallée Chessy,42900
-Patterns:QYEN|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-Patterns:TOBY|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+Patterns:QYEN|normal|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+Patterns:TOBY|reverse|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1

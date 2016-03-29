@@ -121,13 +121,11 @@ public class ManagementPanel extends JPanel{
 	public void updateTrainList(ArrayList<Train> trains){
 		trainsList.removeAll();
 		DefaultListModel listModel = new DefaultListModel();
-		System.out.println("-----------------------------\nMise à jour des trains");
 		for(Train t : trains){
 			String stationName = "didn't start";
 			if(t.getCurrentStation() != null)
 				stationName = t.getCurrentStation().getName();
 			listModel.addElement(t.getCode() + "("+stationName+")");
-			System.out.println(t.getCode()+ "("+stationName+")");
 		}
 		trainsList.setModel(listModel);
 		trainsList.repaint();

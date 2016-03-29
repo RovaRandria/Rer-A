@@ -14,6 +14,7 @@ import java.util.HashMap;
  */
 public class LineBuilder {
 	private Line line;
+	private Line reversedLine;
 
 	public void buildLine(String fileName) {
 		/*line = new Line(totalLength);
@@ -54,6 +55,7 @@ public class LineBuilder {
 		*/
 		HashMap<String,TrainPattern> patterns = new HashMap<String,TrainPattern>();
 		String l;
+		Boolean b=false;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			while ((l = br.readLine()) != null) {
@@ -85,23 +87,33 @@ public class LineBuilder {
 						line.addStation(stationName, stationPos);
 						j++;
 					}
+					reversedLine = line.getReversedLine();
 				}
 				else if(str1[0].equals("Patterns")){
 					String str2[]=str1[1].split(separator2);
 					System.out.println("COD : " +str2[0]);
 					String code=str2[0];
 					ArrayList<Integer> al=new ArrayList<Integer>();
-					String str3[]=str2[1].split(separator3);
+					String str3[]=str2[2].split(separator3);
 					for(int i=0;i<str3.length;i++){
 						al.add(Integer.parseInt(str3[i]));
 					}
+					
+				
+					Line actualLine = line;
+					if(str2[1].equals("reverse")){
+						actualLine = reversedLine;
+						b=true;
+					}
+					
 					ArrayList<Station> newPath= new ArrayList<Station>();
 					for(int i=0;i<al.size();i++){
 						if(al.get(i)==1){
-							newPath.add(line.getStations().get(i));
+							newPath.add(actualLine.getStations().get(i));
 						}
 					}
-					TrainPattern tp= new TrainPattern(code,newPath);
+					
+					TrainPattern tp= new TrainPattern(code,newPath,b);
 					System.out.println(code);
 					patterns.put(code,tp);
 					line.setPatterns(patterns);
@@ -119,4 +131,9 @@ public class LineBuilder {
 	public Line getBuiltLine() {
 		return line;
 	}
+	
+	public Line getBuiltReversedLine() {
+		return reversedLine;
+	}
+	
 }
