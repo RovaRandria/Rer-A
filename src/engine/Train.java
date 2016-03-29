@@ -21,7 +21,6 @@ public class Train extends Thread {
 	private int margin;
 	private boolean hasArrived = false;
 
-	
 	public Train(Line line, Canton startCanton, int speed, TrainPattern trainPattern, float startTime) {
 		this.line = line;
 		this.speed = speed;
@@ -217,4 +216,7 @@ public class Train extends Thread {
 		this.currentStation = currentStation;
 	}
 	
+	public boolean isArrived() {
+		return hasArrived;
+	}
 }

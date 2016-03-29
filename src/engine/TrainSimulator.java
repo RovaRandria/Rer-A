@@ -16,8 +16,7 @@ public class TrainSimulator {
 		LineBuilder lineBuilder = new LineBuilder();
 		lineBuilder.buildLine(fileName);
 		line = lineBuilder.getBuiltLine();
-		if(line != null)
-			reversedLine = line.getReversedLine();
+		reversedLine = lineBuilder.getBuiltReversedLine();
 		this.trains = new ArrayList<Train>();
 		schedules = new HashMap<Station, ArrayList<Integer>>();
 	}
@@ -52,6 +51,15 @@ public class TrainSimulator {
 			while(it.hasNext()){
 				Entry<Station, Integer> next = it.next();
 				schedules.get(next.getKey()).add(next.getValue());
+			}
+		}
+	}
+	
+	public void updateTrains(){
+		for(int i=0;i<trains.size();i++){
+			if(trains.get(i).isArrived()){
+				trains.remove(i);
+				i--;
 			}
 		}
 	}

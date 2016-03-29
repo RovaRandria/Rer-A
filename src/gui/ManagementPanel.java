@@ -5,16 +5,20 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 
@@ -37,19 +41,29 @@ public class ManagementPanel extends JPanel{
 	private JLabel zoomLabel = new JLabel("Zoom : ");
 	private JList trainsList;
 	private JComboBox trainsComboBox;
-//	private JTextField hoursTextField = new JTextField(2);
-//	private JTextField minutesTextField = new JTextField(2);
 	private JComboBox hoursComboBox;
 	private JComboBox minutesComboBox;
 	private JLabel hourLabel = new JLabel("h");
 	private JLabel minuteLabel = new JLabel("mn");
+	private JLabel addTrainLabel = new JLabel("Ajouter un train ");
+	private JLabel startLabel = new JLabel("Départ à : ");
+	private JLabel codeLabel = new JLabel("Code du train : ");
 	private JScrollPane trainsListScroller;
-	private JButton addTrainButton = new JButton("Ajouter un train");
+	private JButton addTrainButton = new JButton("Ajouter");
+	private ButtonGroup directionButtonGroup = new ButtonGroup();
+	private JRadioButton lineRadioButton = new JRadioButton("en direction de Marne-La-Vallée Chessy");
+	private JRadioButton reversedLineRadioButton = new JRadioButton("en direction de Cergy-Le-Haut");
 	
+	private JPanel hoursPanel = new JPanel();
+	private JPanel addButtonPanel = new JPanel();
 	private JPanel speedPanel = new JPanel();
 	private JPanel zoomPanel = new JPanel();
 	private JPanel headerPanel = new JPanel();
 	private JPanel footerPanel = new JPanel();
+	
+	private JLabel browserPath=new JLabel("Modifier la ligne :");
+	
+	private JButton pathValue=new JButton("Parcourir");
 	
 	public ManagementPanel(){
 		init();
@@ -63,46 +77,81 @@ public class ManagementPanel extends JPanel{
 		trainsList = new JList(trainNames); 
 		trainsList.setVisibleRowCount(-1);
 		trainsListScroller = new JScrollPane(trainsList);
-		trainsListScroller.setPreferredSize(new Dimension(250, 150));
+		trainsListScroller.setPreferredSize(new Dimension(275, 175));
 		
 		hoursComboBox = new JComboBox(hoursList().toArray());
 		minutesComboBox = new JComboBox(minutesList().toArray());
-		trainsComboBox = new JComboBox(trainNames);
+		trainsComboBox = new JComboBox();
 		
+		lineRadioButton.setSelected(true);
+		directionButtonGroup.add(lineRadioButton);
+		directionButtonGroup.add(reversedLineRadioButton);
+
 		speedPanel.add(speedLabel);
 		speedPanel.add(speedSlider);
 		zoomPanel.add(zoomLabel);
 		zoomPanel.add(zoomSlider);
-				
+		addButtonPanel.add(addTrainButton);
+		
+		hoursPanel.add(hoursComboBox);
+		hoursPanel.add(hourLabel);
+		hoursPanel.add(minutesComboBox);
+		hoursPanel.add(minuteLabel);
+		
 		headerPanel.add(speedPanel);
 		headerPanel.add(zoomPanel);
-		headerPanel.setPreferredSize(new Dimension(650, 50));
-		
+		headerPanel.setPreferredSize(new Dimension(650, 40));
 		headerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.DARK_GRAY));
-		
+		addButtonPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.DARK_GRAY));
+		addButtonPanel.setPreferredSize(new Dimension(325, 35));
+
 		footerPanel.setLayout(new GridBagLayout());
 		GridBagConstraints frameConstraints = new GridBagConstraints();
-		frameConstraints.insets = new Insets(10, 5, 10, 100);
+		frameConstraints.insets = new Insets(5, 5, 5, 50);
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 0;
-		frameConstraints.gridheight = 3;
+		frameConstraints.gridheight = 7;
 		footerPanel.add(trainsListScroller, frameConstraints);
+		
+		frameConstraints.insets = new Insets(10, 2, 2, 2);
 		frameConstraints.gridx = 1;
 		frameConstraints.gridheight = 1;
-		frameConstraints.insets = new Insets(10, 5, 5, 10);
-		footerPanel.add(trainsComboBox, frameConstraints);
-		frameConstraints.gridx = GridBagConstraints.RELATIVE;
-		frameConstraints.insets = new Insets(10, 5, 5, 5);
-		footerPanel.add(hoursComboBox, frameConstraints);
-		footerPanel.add(hourLabel, frameConstraints);
-		footerPanel.add(minutesComboBox, frameConstraints);
-		footerPanel.add(minuteLabel, frameConstraints);
+		footerPanel.add(addTrainLabel, frameConstraints);
+
+		frameConstraints.insets = new Insets(2, 2, 2, 2);
+		frameConstraints.gridx = 2;
+		frameConstraints.gridy = GridBagConstraints.RELATIVE;
+		frameConstraints.anchor = GridBagConstraints.WEST;
+		frameConstraints.fill = GridBagConstraints.NONE;
+		footerPanel.add(lineRadioButton, frameConstraints);
+		footerPanel.add(reversedLineRadioButton, frameConstraints);
 		
-		frameConstraints.gridy = 1;
+		frameConstraints.anchor = GridBagConstraints.CENTER;
+		frameConstraints.fill = GridBagConstraints.CENTER;
 		frameConstraints.gridx = 1;
-		frameConstraints.gridwidth = 5;
-		frameConstraints.insets = new Insets(5, 5, 10, 5);
-		footerPanel.add(addTrainButton, frameConstraints);
+		frameConstraints.gridy = 3;
+		footerPanel.add(codeLabel, frameConstraints);
+		frameConstraints.gridx = 2;
+		footerPanel.add(trainsComboBox, frameConstraints);
+
+		frameConstraints.gridx = 1;
+		frameConstraints.gridy = 4;
+		footerPanel.add(startLabel, frameConstraints);
+		frameConstraints.gridx = 2;
+		footerPanel.add(hoursPanel, frameConstraints);
+		
+		frameConstraints.insets = new Insets(2, 2, 10, 2);
+		frameConstraints.gridx = 1;
+		frameConstraints.gridy = 5;
+		frameConstraints.gridwidth = 2;
+		footerPanel.add(addButtonPanel, frameConstraints);
+		
+		frameConstraints.gridx = 1;
+		frameConstraints.gridy = 6;
+		frameConstraints.gridwidth = 1;
+		footerPanel.add(browserPath, frameConstraints);
+		frameConstraints.gridx = 2;
+		footerPanel.add(pathValue, frameConstraints);
 		
 		this.add(headerPanel);
 		this.add(footerPanel);
@@ -111,13 +160,16 @@ public class ManagementPanel extends JPanel{
 	public void updateTrainList(ArrayList<Train> trains){
 		trainsList.removeAll();
 		DefaultListModel listModel = new DefaultListModel();
-		System.out.println("-----------------------------\nMise à jour des trains");
 		for(Train t : trains){
-			String stationName = "didn't start";
+			String stationName;
 			if(t.getCurrentStation() != null)
 				stationName = t.getCurrentStation().getName();
+			else{
+				int time = (int)t.getStartTime();
+				String hour = (((time)/60<10)?"0":"") +(time)/60 + "h"+((time%60<10)?"0":"") + (time%60);
+				stationName = "start at " + hour;
+			}
 			listModel.addElement(t.getCode() + "("+stationName+")");
-			System.out.println(t.getCode()+ "("+stationName+")");
 		}
 		trainsList.setModel(listModel);
 		trainsList.repaint();
@@ -150,5 +202,46 @@ public class ManagementPanel extends JPanel{
 	public static int getZoomInit() {
 		return ZOOM_INIT;
 	}
+
+	public JButton getPathValue() {
+		return pathValue;
+	}
+
+	public void setPathValue(JButton pathValue) {
+		this.pathValue = pathValue;
+	}
+
+	public JComboBox getHoursComboBox() {
+		return hoursComboBox;
+	}
+
+	public void setHoursComboBox(JComboBox hoursComboBox) {
+		this.hoursComboBox = hoursComboBox;
+	}
+
+	public JComboBox getMinutesComboBox() {
+		return minutesComboBox;
+	}
+
+	public void setMinutesComboBox(JComboBox minutesComboBox) {
+		this.minutesComboBox = minutesComboBox;
+	}
+
+	public JComboBox getTrainsComboBox() {
+		return trainsComboBox;
+	}
+
+	public JButton getAddTrainButton() {
+		return addTrainButton;
+	}
+
+	public JRadioButton getLineRadioButton() {
+		return lineRadioButton;
+	}
+
+	public JRadioButton getReversedLineRadioButton() {
+		return reversedLineRadioButton;
+	}
+	
 
 }

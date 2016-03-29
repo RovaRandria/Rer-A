@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -43,17 +44,28 @@ public class HoursPanel extends JPanel {
 	public void init() {
 		jsp1.setViewportView(list1);
 		jsp2.setViewportView(list2);
-		list1.setPreferredSize(new Dimension(200, 300));
-		list2.setPreferredSize(new Dimension(200, 300));
-		jsp1.setPreferredSize(new Dimension(250, 350));
-		jsp2.setPreferredSize(new Dimension(250, 350));
-		this.setLayout(new GridLayout(3, 2));
-		this.add(stationLabel);
-		this.add(new JLabel(""));
-		this.add(new JLabel("Direction Marne-la-Vallée Chessy"));
-		this.add(new JLabel("Direction Cergy"));
-		this.add(jsp1);
-		this.add(jsp2);
+		list1.setPreferredSize(new Dimension(250, 100));
+		list2.setPreferredSize(new Dimension(250, 100));
+		jsp1.setPreferredSize(new Dimension(300, 150));
+		jsp2.setPreferredSize(new Dimension(300, 150));
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints frameConstraints = new GridBagConstraints();
+		frameConstraints.gridx = 0;
+		frameConstraints.gridy = 0;
+		frameConstraints.insets = new Insets(0, 20, 0, 20);
+		this.add(stationLabel, frameConstraints);
+		frameConstraints.gridx = 0;
+		frameConstraints.gridy = 1;
+		this.add(new JLabel("Direction Marne-la-Vallée Chessy"), frameConstraints);
+		frameConstraints.gridx = 1;
+		frameConstraints.gridy = 1;
+		this.add(new JLabel("Direction Cergy"), frameConstraints);
+		frameConstraints.gridx = 0;
+		frameConstraints.gridy = 2;
+		this.add(jsp1, frameConstraints);
+		frameConstraints.gridx = 1;
+		frameConstraints.gridy = 2;
+		this.add(jsp2, frameConstraints);
 	}
 
 	public boolean isCurrentPan() {
