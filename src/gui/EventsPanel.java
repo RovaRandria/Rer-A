@@ -4,10 +4,15 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -16,11 +21,13 @@ import javax.swing.JTextArea;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
+import engine.Event;
+
 public class EventsPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JList eventsList = new JList();		
+	private JList eventsList = new JList(new DefaultListModel());		
 
 	private JScrollPane eventsJScrollPanel = new JScrollPane();
 
@@ -33,10 +40,14 @@ public class EventsPanel extends JPanel {
 	private JSpinner positionSpinner = new JSpinner();
 
 	private JSpinner durationSpinner = new JSpinner();
+	
+	private JCheckBox reverse = new JCheckBox("Sens inverse");
 
-	private JButton selectDuration = new JButton("Sélectionner durée");
+	private JButton selectDuration = new JButton("Sélectionner position");
 
 	private JButton newEventButton = new JButton("Créer");
+	
+	private SimulationGUI sim;
 
 	static final int POS_MIN =0;
 	static final int POS_MAX = 5000;
@@ -46,8 +57,9 @@ public class EventsPanel extends JPanel {
 	static final int TIME_MAX = 5000;
 	static final int TIME_INIT = 0;
 
-	public EventsPanel() {
+	public EventsPanel(SimulationGUI sim) {
 		super();
+		this.sim = sim;
 		init();
 	}
 
@@ -60,8 +72,27 @@ public class EventsPanel extends JPanel {
 		SpinnerModel model = new SpinnerNumberModel(POS_INIT,POS_MIN, POS_MAX, 1);
 		positionSpinner = new JSpinner(model);
 
-		SpinnerModel timemodel = new SpinnerNumberModel(TIME_INIT,TIME_MIN, TIME_MAX, 1);
+		SpinnerModel timemodel = new SpinnerNumberModel(TIME_INIT, TIME_MIN, TIME_MAX, 1);
 		durationSpinner = new JSpinner(timemodel);
+		
+		newEventButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Event ev = new Event((reverse.isSelected())?sim.getLine().getTotallength()/sim.getDashboard().getDistancePerPixel()+50-(Integer)positionSpinner.getValue():(Integer)positionSpinner.getValue(), (Integer)durationSpinner.getValue(), reverse.isSelected(), "");
+				sim.addEvent(ev);
+				((DefaultListModel)eventsList.getModel()).addElement(ev);
+			}
+		});
+		
+		selectDuration.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(EventsPanel.this, "Veuillez cliquer sur la ligne");
+				sim.getDashboard().enterEventMode();
+			}
+		});
 
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints frameConstraints = new GridBagConstraints();
@@ -93,14 +124,26 @@ public class EventsPanel extends JPanel {
 		
 		frameConstraints.gridx = 6;
 		frameConstraints.gridy = 0;
+		this.add(reverse, frameConstraints);
+		
+		frameConstraints.gridx = 7;
+		frameConstraints.gridy = 0;
 		this.add(newEventButton, frameConstraints);
 
 		frameConstraints.ipady = 100;  
 		frameConstraints.ipadx = 500;
 		frameConstraints.weightx = 0.0;
-		frameConstraints.gridwidth = 6;
+		frameConstraints.gridwidth = 7;
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 1;
 		this.add(eventsJScrollPanel, frameConstraints);
+	}
+	
+	public void setPosition(int x) {
+		positionSpinner.setValue(x);
+	}
+	
+	public void setDirection(boolean reverse) {
+		this.reverse.setSelected(reverse);
 	}
 }

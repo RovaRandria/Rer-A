@@ -35,6 +35,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import engine.Canton;
+import engine.Event;
 import engine.Line;
 import engine.Station;
 import engine.Train;
@@ -67,7 +68,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 	private JPanel wholeFrame = new JPanel();
 	private JScrollPane dashboardScrollPanel = new JScrollPane();
 	private JTabbedPane infoTabbedPanel = new JTabbedPane();
-	private EventsPanel eventsPanel = new EventsPanel();
+	private EventsPanel eventsPanel = new EventsPanel(this);
 	private HoursPanel trainsHoursPanel;
 	private ManagementPanel managementPanel;
 	
@@ -76,6 +77,8 @@ public class SimulationGUI extends JFrame implements Runnable {
 
 	private JPanel hourPanel = new JPanel();
 	private JLabel hourLabel;
+	
+	private ArrayList<Event> events = new ArrayList<Event>();
 	
 	ImageIcon hoursIcon = new ImageIcon("./img/icons/hours.png");
 	ImageIcon eventsIcon = new ImageIcon("./img/icons/events.png");
@@ -120,11 +123,11 @@ public class SimulationGUI extends JFrame implements Runnable {
 	public void init(String fileName) {
 		trainsim = new TrainSimulator(fileName);
 		trainsHoursPanel = new HoursPanel(trainsim);
-		dashboard = new SimulationDashboard(trainsHoursPanel);
+		eventsPanel = new EventsPanel(this);
+		dashboard = new SimulationDashboard(trainsHoursPanel, eventsPanel);
 		managementPanel = new ManagementPanel();
 		managementPanel.getZoomSlider().addChangeListener(new ZoomAction());
 		managementPanel.getSpeedSlider().addChangeListener(new SpeedChangingAction());
-		eventsPanel = new EventsPanel();
 		hourLabel = new JLabel("0h00");
 		hourLabel.setFont(hourFont);
 		hourPanel.add(hourLabel);
@@ -218,7 +221,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 						newTrain.setPath(newPath);*/
 						newTrain.start();
 					}
-					}
+				}
 			
 			br.close();
 		} catch (FileNotFoundException e) {
@@ -253,13 +256,29 @@ public class SimulationGUI extends JFrame implements Runnable {
 				System.err.println(e.getMessage());
 			}
 			currentTime++;
+			decrementEvents();
 		}
 	}
 
-
+	public void addEvent(Event e) {
+		events.add(e);
+		dashboard.addEvent(e);
+		dashboard.repaint();
+	}
+	
+	public void decrementEvents() {
+		for(Event e : events) {
+			e.decrementDuration();
+		}
+		eventsPanel.repaint();
+	}
 
 	public static float getCurrentTime(){
 		return currentTime;
+	}
+	
+	public Line getLine() {
+		return trainsim.getLine();
 	}
 
 	private class PathBrowserAction implements ActionListener {
@@ -301,6 +320,10 @@ public class SimulationGUI extends JFrame implements Runnable {
 
 	public static void setSpeed(float speed) {
 		SimulationGUI.speed = speed;
+	}
+	
+	public SimulationDashboard getDashboard() {
+		return dashboard;
 	}
 
 	private class SpeedChangingAction implements ChangeListener {

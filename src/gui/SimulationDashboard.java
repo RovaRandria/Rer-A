@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import engine.Canton;
+import engine.Event;
 import engine.Line;
 import engine.Station;
 import engine.Train;
@@ -32,10 +33,13 @@ public class SimulationDashboard extends JPanel {
 	private final int INIT_DISTANCE = 10;
 	private int distancePerPixel = INIT_DISTANCE;
 	private HoursPanel hourpan;
+	private EventsPanel evpan;
+	private ArrayList<Event> events = new ArrayList<Event>();
+	private boolean eventmode = false;
 	
-	
-	public SimulationDashboard(final HoursPanel hourpan) {
+	public SimulationDashboard(final HoursPanel hourpan, final EventsPanel evpan) {
 		this.hourpan = hourpan;
+		this.evpan = evpan;
 		this.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -64,30 +68,52 @@ public class SimulationDashboard extends JPanel {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(e.getY() >= START_Y-10 && e.getY() <= START_Y+10) {
-					List<Station> sta = line.getStations();
-					for(Station s : sta) {
-						if(e.getX()-START_X >= s.getPosition()/distancePerPixel-10 && e.getX()-START_X <= s.getPosition()/distancePerPixel+10) {
-							hourpan.setStation(s);
-							hourpan.setCurrentPan(true);
-							break;
+				if(!eventmode) {
+					if(e.getY() >= START_Y-10 && e.getY() <= START_Y+10) {
+						List<Station> sta = line.getStations();
+						for(Station s : sta) {
+							if(e.getX()-START_X >= s.getPosition()/distancePerPixel-10 && e.getX()-START_X <= s.getPosition()/distancePerPixel+10) {
+								hourpan.setStation(s);
+								hourpan.setCurrentPan(true);
+								break;
+							}
+						}
+					}
+					else if(e.getY() >= START_Y+140 && e.getY() <= START_Y+160) {
+						List<Station> sta = reversedLine.getStations();
+						for(Station s : sta) {
+							if(e.getX()-START_X >= s.getPosition()/distancePerPixel-10 && e.getX()-START_X <= s.getPosition()/distancePerPixel+10) {
+								hourpan.setStation(s);
+								hourpan.setCurrentPan(true);
+								break;
+							}
 						}
 					}
 				}
-				else if(e.getY() >= START_Y+140 && e.getY() <= START_Y+160) {
-					List<Station> sta = reversedLine.getStations();
-					for(Station s : sta) {
-						if(e.getX()-START_X >= s.getPosition()/distancePerPixel-10 && e.getX()-START_X <= s.getPosition()/distancePerPixel+10) {
-							hourpan.setStation(s);
-							hourpan.setCurrentPan(true);
-							break;
-						}
+				else {
+					if(e.getY() > SimulationDashboard.this.getHeight()/2) {
+						evpan.setPosition(line.getTotallength()/10 + 50 - e.getX());
+						evpan.setDirection(true);
 					}
+					else {
+						evpan.setPosition(e.getX());
+						evpan.setDirection(false);
+					}
+					eventmode = false;
 				}
 			}
 		});
 	}
 
+	public void addEvent(Event e) {
+		events.add(e);
+	}
+	
+	public void enterEventMode() {
+		eventmode = true;
+	}
+	
+	
 	public void setReversedLine(Line reversedLine) {
 		this.reversedLine = reversedLine;
 	}
@@ -96,12 +122,12 @@ public class SimulationDashboard extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
-		printLine(line, START_X, START_Y, g2);
-		printLine(reversedLine, START_X, START_Y + 150, g2);
+		printLine(line, START_X, START_Y, g2, false);
+		printLine(reversedLine, START_X, START_Y + 150, g2, true);
 		printTrains(START_X, START_Y, g2);
 	}
 
-	private void printLine(Line line, int startX, int startY, Graphics2D g2) {
+	private void printLine(Line line, int startX, int startY, Graphics2D g2, boolean reverse) {
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(new Color(200,200,0,255));
 		for (Canton canton : line.getCantons()) {
@@ -128,6 +154,12 @@ public class SimulationDashboard extends JPanel {
 			else
 				drawStation(startX, startY, g2, line.getStations().get(i), startY+60);
 			i++;
+		}
+		for(Event e : events) {
+			if(e.getDuration() > 0 && e.isReverse() == reverse) {
+				g2.setColor(Color.ORANGE);
+				g2.drawRect(e.getPosition()-5, startY-5, 10, 10);
+			}
 		}
 	}
 	
