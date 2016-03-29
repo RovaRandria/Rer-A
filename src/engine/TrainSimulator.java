@@ -55,6 +55,15 @@ public class TrainSimulator {
 		}
 	}
 	
+	public void updateTrains(){
+		for(int i=0;i<trains.size();i++){
+			if(trains.get(i).isArrived()){
+				trains.remove(i);
+				i--;
+			}
+		}
+	}
+	
 	public String SchedulesToString(){
 		//Iterator<Entry<Station, ArrayList<Integer>>> it = schedules.entrySet().iterator();
 		String scheduleStr = "Horaires :\n";
