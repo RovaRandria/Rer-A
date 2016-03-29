@@ -161,9 +161,14 @@ public class ManagementPanel extends JPanel{
 		trainsList.removeAll();
 		DefaultListModel listModel = new DefaultListModel();
 		for(Train t : trains){
-			String stationName = "didn't start";
+			String stationName;
 			if(t.getCurrentStation() != null)
 				stationName = t.getCurrentStation().getName();
+			else{
+				int time = (int)t.getStartTime();
+				String hour = (((time)/60<10)?"0":"") +(time)/60 + "h"+((time%60<10)?"0":"") + (time%60);
+				stationName = "start at " + hour;
+			}
 			listModel.addElement(t.getCode() + "("+stationName+")");
 		}
 		trainsList.setModel(listModel);
