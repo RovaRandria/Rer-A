@@ -45,13 +45,11 @@ public class TrainSimulator {
 	public ArrayList<Train> getTrains() {
 		return trains;
 	}
-<<<<<<< HEAD
-	
-=======
+
 	/**
 	 * Update the schedules
 	 */
->>>>>>> fa8adbc78326527f498d5f0f6193cf66d61626e7
+
 	public void updateSchedules(){
 		schedules = new HashMap<Station, ArrayList<Integer>>();
 		
@@ -80,14 +78,12 @@ public class TrainSimulator {
 			}
 		}
 	}
-<<<<<<< HEAD
-	
-=======
+
 	/**
 	 * Displays the schedules for each station.
 	 * @return
 	 */
->>>>>>> fa8adbc78326527f498d5f0f6193cf66d61626e7
+
 	public String schedulesToString(){
 		//Iterator<Entry<Station, ArrayList<Integer>>> it = schedules.entrySet().iterator();
 		String scheduleStr = "Horaires :\n";
@@ -102,15 +98,13 @@ public class TrainSimulator {
 		}
 		return scheduleStr;
 	}
-<<<<<<< HEAD
-	
-=======
+
 	/**
 	 * Displays the schedules at a station.
 	 * @param s
 	 * @return
 	 */
->>>>>>> fa8adbc78326527f498d5f0f6193cf66d61626e7
+
 	public String schedulesToString(Station s){
 		//Iterator<Entry<Station, ArrayList<Integer>>> it = schedules.entrySet().iterator();
 		String scheduleStr = "Horaires :\n";
