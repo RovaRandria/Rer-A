@@ -1,5 +1,9 @@
 package engine;
-
+/**
+ * Data class describing a canton.
+ * @author Matthieu
+ * 
+ */
 public class Canton {
 	private int id;
 	private int startPoint;
@@ -28,7 +32,11 @@ public class Canton {
 	public int getEndPoint() {
 		return startPoint + length;
 	}
-
+	/**
+	 * Make a train enter the canton. The train's thread will wait if the canton is already 
+	 * occupied or blocked.
+	 * @param train
+	 */
 	public synchronized void enter(Train train) {
 		while(occupyingTrain != null || blocked) {
 			//System.out.println(toString() + " occupied !");
@@ -52,22 +60,38 @@ public class Canton {
 
 	}
 
+	/**
+	 * Make a train leave the canton. Notify the threads and let 
+	 * enter one other train if there is one waiting
+	 */
 	public synchronized void exit() {
 		occupyingTrain = null;
 		notify();
 		//System.out.println("Canton freed !");
 	}
 	
+	/**
+	 * Block the canton
+	 */
 	public synchronized void block(){
 		System.out.println("On bloque le canton débutant à " + startPoint + " et terminant à " + (startPoint + length));
 		blocked = true;
 		
 	}
+	/**
+	 * Unblock the canton and notify the threads and let 
+	 * enter one train if there is one waiting
+	 */
 	public synchronized void unblock(){
 		notify();
 		blocked = false;
 	}
 	
+	/**
+	 * 
+	 * @return true if there is a train on the canton, 
+	 * false if not
+	 */
 	public boolean isFree() {
 		return occupyingTrain == null;
 	}

@@ -41,12 +41,13 @@ public class EventsPanel extends JPanel {
 	
 	private JCheckBox reverse = new JCheckBox("Sens inverse");
 
-	private JButton selectPositon = new JButton("Sélectionner position");
+	private JButton selectPosition = new JButton("Sélectionner position");
 
 	private JButton newEventButton = new JButton("Créer");
 	
 	private SimulationGUI sim;
 
+	
 	static final int POS_MIN =0;
 	static final int POS_MAX = 5000;
 	static final int POS_INIT = 0;
@@ -78,17 +79,19 @@ public class EventsPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int position = (Integer)positionSpinner.getValue();
-				Event ev = new Event((reverse.isSelected())?sim.getLine().getTotallength()-position:position, (Integer)durationSpinner.getValue(), reverse.isSelected(), "");
-				sim.addEvent(ev);
-				((DefaultListModel)eventsList.getModel()).addElement(ev);
+				if((Integer)durationSpinner.getValue() > 0){
+					Event ev = new Event((reverse.isSelected())?sim.getLine().getTotallength()-position:position, (Integer)durationSpinner.getValue(), reverse.isSelected(), "");
+					sim.addEvent(ev);
+					((DefaultListModel)eventsList.getModel()).addElement(ev);
+				}
 			}
 		});
 		
-		selectPositon.addActionListener(new ActionListener() {
+		selectPosition.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(EventsPanel.this, "Veuillez cliquer sur la ligne");
+				selectPosition.setText("Cliquez sur la ligne");
 				sim.getDashboard().enterEventMode();
 			}
 		});
@@ -111,7 +114,7 @@ public class EventsPanel extends JPanel {
 
 		frameConstraints.gridx = 3;
 		frameConstraints.gridy = 0;
-		this.add(selectPositon, frameConstraints);
+		this.add(selectPosition, frameConstraints);
 
 		frameConstraints.gridx = 4;
 		frameConstraints.gridy = 0;
@@ -139,6 +142,7 @@ public class EventsPanel extends JPanel {
 	}
 	
 	public void setPosition(int x) {
+		selectPosition.setText("Sélectionner position");
 		positionSpinner.setValue(x);
 		System.out.println(positionSpinner.getValue());
 	}

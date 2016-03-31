@@ -112,7 +112,6 @@ public class SimulationGUI extends JFrame implements Runnable {
 		managementPanel.getAddTrainButton().addActionListener(new AddTrainAction());
 		managementPanel.getLineRadioButton().addActionListener(new UpdateComboBoxLineAction());
 		managementPanel.getReversedLineRadioButton().addActionListener(new UpdateComboBoxReversedLineAction());
-		eventsPanel = new EventsPanel(this);
 		hourLabel = new JLabel("0h00");
 		hourLabel.setFont(hourFont);
 		hourPanel.add(hourLabel);
@@ -169,8 +168,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		try {
 			
 			BufferedReader br = new BufferedReader(new FileReader("./src/trains.txt"));
-			while ((l = br.readLine()) != null) {
-				
+			while ((l = br.readLine()) != null) {	
 				String separator1="\\|";
 				str1=l.split(separator1);				
 				System.out.println("Pattern:");
