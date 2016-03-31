@@ -12,10 +12,10 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
@@ -35,15 +35,21 @@ public class EventsPanel extends JPanel {
 
 	private JLabel durationLabel = new JLabel("Durée :");
 
+	private JLabel eventNameLabel = new JLabel("Intitulé de l'évènement :");
+	
 	private JSpinner positionSpinner = new JSpinner();
 
 	private JSpinner durationSpinner = new JSpinner();
 	
-	private JCheckBox reverse = new JCheckBox("Sens inverse");
+	private JCheckBox lineCheckBox = new JCheckBox("Direction Marne-La-Vallée");
+	
+	private JCheckBox reversedLneCheckBox = new JCheckBox("Direction Cergy-Le-Haut");
 
 	private JButton selectPosition = new JButton("Sélectionner position");
 
 	private JButton newEventButton = new JButton("Créer");
+	
+	private JTextField eventNameTextField  = new JTextField("Accident", 25);
 	
 	private SimulationGUI sim;
 
@@ -67,6 +73,7 @@ public class EventsPanel extends JPanel {
 	public void init() {
 		eventsJScrollPanel = new JScrollPane(eventsList);
 		eventsJScrollPanel.setPreferredSize(new Dimension(500, 200));
+		eventNameTextField.setMinimumSize(new Dimension(75,20));
 		
 		SpinnerModel model = new SpinnerNumberModel(POS_INIT,POS_MIN, POS_MAX, 1);
 		positionSpinner = new JSpinner(model);
@@ -80,9 +87,9 @@ public class EventsPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int position = (Integer)positionSpinner.getValue();
 				if((Integer)durationSpinner.getValue() > 0){
-					Event ev = new Event((reverse.isSelected())?sim.getLine().getTotallength()-position:position, (Integer)durationSpinner.getValue(), reverse.isSelected(), "");
-					sim.addEvent(ev);
-					((DefaultListModel)eventsList.getModel()).addElement(ev);
+//					Event ev = new Event((reverse.isSelected())?sim.getLine().getTotallength()-position:position, (Integer)durationSpinner.getValue(), reverse.isSelected(), "");
+//					sim.addEvent(ev);
+//					((DefaultListModel)eventsList.getModel()).addElement(ev);
 				}
 			}
 		});
@@ -95,49 +102,55 @@ public class EventsPanel extends JPanel {
 				sim.getDashboard().enterEventMode();
 			}
 		});
-
+ 
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints frameConstraints = new GridBagConstraints();
-		frameConstraints.insets = new Insets(20, 10, 20, 10);
+		frameConstraints.insets = new Insets(10,5,5,5);
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 0;
 		this.add(newEventLabel, frameConstraints);
-		frameConstraints.gridy = GridBagConstraints.RELATIVE;
 
-		frameConstraints.gridx = 1;
-		frameConstraints.gridy = 0;
+		frameConstraints.gridx = GridBagConstraints.RELATIVE;
 		this.add(positionLabel, frameConstraints);
-
-		frameConstraints.gridx = 2;
-		frameConstraints.gridy = 0;
 		this.add(positionSpinner, frameConstraints);
-
-		frameConstraints.gridx = 3;
-		frameConstraints.gridy = 0;
 		this.add(selectPosition, frameConstraints);
 
-		frameConstraints.gridx = 4;
-		frameConstraints.gridy = 0;
+		frameConstraints.insets = new Insets(5,5,5,5);
+		frameConstraints.gridx = 1;
+		frameConstraints.gridy = 1;
 		this.add(durationLabel, frameConstraints);
-
-		frameConstraints.gridx = 5;
-		frameConstraints.gridy = 0;
+		frameConstraints.gridx = 2;
 		this.add(durationSpinner, frameConstraints);
 		
-		frameConstraints.gridx = 6;
-		frameConstraints.gridy = 0;
-		this.add(reverse, frameConstraints);
+		frameConstraints.anchor = GridBagConstraints.WEST;
+		frameConstraints.fill = GridBagConstraints.NONE;
+		frameConstraints.gridx = 3;
+		this.add(lineCheckBox, frameConstraints);
+		frameConstraints.gridy = 2;
+		this.add(reversedLneCheckBox, frameConstraints);
 		
-		frameConstraints.gridx = 7;
+		frameConstraints.anchor = GridBagConstraints.CENTER;
+		frameConstraints.fill = GridBagConstraints.CENTER;
+		frameConstraints.gridx = 1;
+		frameConstraints.gridy = 3;
+		this.add(eventNameLabel, frameConstraints);
+		frameConstraints.gridx = 2;
+		this.add(eventNameTextField, frameConstraints);
+		
+		frameConstraints.gridx = 4;
 		frameConstraints.gridy = 0;
+		frameConstraints.gridheight = 4;
+		frameConstraints.insets = new Insets(5,25,5,10);
 		this.add(newEventButton, frameConstraints);
 
+		frameConstraints.insets = new Insets(5,5,5,5);
 		frameConstraints.ipady = 100;  
 		frameConstraints.ipadx = 500;
 		frameConstraints.weightx = 0.0;
-		frameConstraints.gridwidth = 7;
+		frameConstraints.gridwidth = 5;
+		frameConstraints.gridheight = 1;
 		frameConstraints.gridx = 0;
-		frameConstraints.gridy = 1;
+		frameConstraints.gridy = 4;
 		this.add(eventsJScrollPanel, frameConstraints);
 	}
 	
@@ -148,6 +161,6 @@ public class EventsPanel extends JPanel {
 	}
 	
 	public void setDirection(boolean reverse) {
-		this.reverse.setSelected(reverse);
+		//this.reverse.setSelected(reverse);
 	}
 }

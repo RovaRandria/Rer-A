@@ -38,7 +38,7 @@ public class TrainSimulator {
 		return trains;
 	}
 	
-	public void UpdateSchedules(){
+	public void updateSchedules(){
 		schedules = new HashMap<Station, ArrayList<Integer>>();
 		
 		for(Station s : line.getStations()){
@@ -65,7 +65,7 @@ public class TrainSimulator {
 		}
 	}
 	
-	public String SchedulesToString(){
+	public String schedulesToString(){
 		//Iterator<Entry<Station, ArrayList<Integer>>> it = schedules.entrySet().iterator();
 		String scheduleStr = "Horaires :\n";
 		for(Station s : line.getStations()){
@@ -80,7 +80,7 @@ public class TrainSimulator {
 		return scheduleStr;
 	}
 	
-	public String SchedulesToString(Station s){
+	public String schedulesToString(Station s){
 		//Iterator<Entry<Station, ArrayList<Integer>>> it = schedules.entrySet().iterator();
 		String scheduleStr = "Horaires :\n";
 		String str = s.getName() + " : ";
