@@ -1,5 +1,9 @@
 package engine;
-
+/**
+ * Data class describing an event.
+ * @author Rova
+ * 
+ */
 public class Event {
 
 	private int position;

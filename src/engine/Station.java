@@ -1,6 +1,10 @@
 package engine;
 
-
+/**
+ * Data class describing a station.
+ * @author Rova
+ *
+ */
 public class Station {
 	
 	private String name;

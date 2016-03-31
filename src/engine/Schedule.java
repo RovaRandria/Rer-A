@@ -1,5 +1,9 @@
 package engine;
-
+/**
+ * Data class describing a schedule.
+ * @author Rova
+ *
+ */
 public class Schedule {
 	private int time;
 	private Train train;
