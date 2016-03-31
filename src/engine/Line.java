@@ -91,6 +91,14 @@ public class Line {
 		return reversedLine;
 	}
 
+	public void blockCanton(int position) throws TerminusException{
+		Canton c = getCantonByPosition(position);
+		c.block();
+	}
+	public void unblockCanton(int position) throws TerminusException{
+		Canton c = getCantonByPosition(position);
+		c.unblock();
+	}
 	public HashMap<String,TrainPattern> getPatterns() {
 		return patterns;
 	}

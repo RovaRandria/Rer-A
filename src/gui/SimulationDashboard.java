@@ -10,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import engine.Canton;
@@ -133,7 +132,6 @@ public class SimulationDashboard extends JPanel {
 		for (Canton canton : line.getCantons()) {
 			int startPoint = canton.getStartPoint();
 			int endPoint = canton.getEndPoint();
-		
 			g2.drawLine(startX + startPoint/distancePerPixel, startY - 15, startX + startPoint/distancePerPixel, startY + 15);
 			g2.drawLine(startX + endPoint/distancePerPixel, startY - 15, startX + endPoint/distancePerPixel, startY + 15);
 		}
@@ -144,7 +142,6 @@ public class SimulationDashboard extends JPanel {
 		
 		
 		g2.drawLine(startX, startY, startX + line.getTotallength()/distancePerPixel, startY);
-		int start = startX;
 		int i = 0;
 		while( i <line.getStations().size()){
 			if(i%3 == 0)
@@ -158,7 +155,7 @@ public class SimulationDashboard extends JPanel {
 		for(Event e : events) {
 			if(e.getDuration() > 0 && e.isReverse() == reverse) {
 				g2.setColor(Color.ORANGE);
-				g2.drawRect(e.getPosition()-5, startY-5, 10, 10);
+				g2.drawRect(e.getPosition()/getDistancePerPixel()-5 + startX, startY-5, 10, 10);
 			}
 		}
 	}

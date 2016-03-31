@@ -33,7 +33,8 @@ public class TrainPattern {
 		this.patternCode = patternCode;
 	}
 	public ArrayList<Station> getPattern() {
-		return (ArrayList<Station>) pattern.clone();
+		ArrayList<Station> clone = ((ArrayList<Station>) pattern.clone());
+		return clone;
 	}
 	public void setPattern(ArrayList<Station> pattern) {
 		this.pattern = pattern;

@@ -61,7 +61,6 @@ public class Train extends Thread {
 			}
 			startRunning();
 			
-			int time = (int)SimulationGUI.getCurrentTime();
 			/*try {
 				wait();
 			} catch (InterruptedException e1) {

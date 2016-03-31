@@ -15,9 +15,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
 import javax.swing.JSpinner;
-import javax.swing.JTextArea;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
@@ -43,7 +41,7 @@ public class EventsPanel extends JPanel {
 	
 	private JCheckBox reverse = new JCheckBox("Sens inverse");
 
-	private JButton selectDuration = new JButton("Sélectionner position");
+	private JButton selectPositon = new JButton("Sélectionner position");
 
 	private JButton newEventButton = new JButton("Créer");
 	
@@ -79,13 +77,14 @@ public class EventsPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Event ev = new Event((reverse.isSelected())?sim.getLine().getTotallength()/sim.getDashboard().getDistancePerPixel()+50-(Integer)positionSpinner.getValue():(Integer)positionSpinner.getValue(), (Integer)durationSpinner.getValue(), reverse.isSelected(), "");
+				int position = (Integer)positionSpinner.getValue();
+				Event ev = new Event((reverse.isSelected())?sim.getLine().getTotallength()-position:position, (Integer)durationSpinner.getValue(), reverse.isSelected(), "");
 				sim.addEvent(ev);
 				((DefaultListModel)eventsList.getModel()).addElement(ev);
 			}
 		});
 		
-		selectDuration.addActionListener(new ActionListener() {
+		selectPositon.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -112,7 +111,7 @@ public class EventsPanel extends JPanel {
 
 		frameConstraints.gridx = 3;
 		frameConstraints.gridy = 0;
-		this.add(selectDuration, frameConstraints);
+		this.add(selectPositon, frameConstraints);
 
 		frameConstraints.gridx = 4;
 		frameConstraints.gridy = 0;
@@ -141,6 +140,7 @@ public class EventsPanel extends JPanel {
 	
 	public void setPosition(int x) {
 		positionSpinner.setValue(x);
+		System.out.println(positionSpinner.getValue());
 	}
 	
 	public void setDirection(boolean reverse) {

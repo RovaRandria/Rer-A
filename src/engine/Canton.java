@@ -7,6 +7,7 @@ public class Canton {
 	private Train occupyingTrain = null;
 	private Station enterStation;
 	private Station exitStation;
+	private boolean blocked;
 
 	public Canton(int id, int length, int startPoint) {
 		this.id = id;
@@ -29,7 +30,7 @@ public class Canton {
 	}
 
 	public synchronized void enter(Train train) {
-		if (occupyingTrain != null) {
+		while(occupyingTrain != null || blocked) {
 			//System.out.println(toString() + " occupied !");
 			// Train stopped just before canton start point !
 			train.setPosition(startPoint - 1);
@@ -56,7 +57,17 @@ public class Canton {
 		notify();
 		//System.out.println("Canton freed !");
 	}
-
+	
+	public synchronized void block(){
+		System.out.println("On bloque le canton débutant à " + startPoint + " et terminant à " + (startPoint + length));
+		blocked = true;
+		
+	}
+	public synchronized void unblock(){
+		notify();
+		blocked = false;
+	}
+	
 	public boolean isFree() {
 		return occupyingTrain == null;
 	}

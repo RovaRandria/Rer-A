@@ -11,6 +11,7 @@ public class TrainSimulator {
 	private Line reversedLine;
 	private ArrayList<Train> trains;
 	private HashMap<Station, ArrayList<Integer>> schedules;
+	private ArrayList<Event> events = new ArrayList<Event>();
 	
 	public TrainSimulator(String fileName) {
 		LineBuilder lineBuilder = new LineBuilder();
@@ -91,5 +92,39 @@ public class TrainSimulator {
 		return scheduleStr;
 	}
 	
+	public void addEvent(Event e) {
+		events.add(e);
+		try {
+			if(e.isReverse())
+				reversedLine.blockCanton(e.getPosition());
+			else{
+				System.out.println("On bloque le canton à la position " + e.getPosition());
+				line.blockCanton(e.getPosition());
+			}
+		} catch (TerminusException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}		
+	}
+	
+	public void decrementEvents() {
+		for(Event e : events) {
+			boolean notFinished = e.getDuration() > 0;
+			e.decrementDuration();
+			if(e.getDuration() == 0 && notFinished){
+				try {
+					if(e.isReverse())
+						reversedLine.unblockCanton(e.getPosition());
+					else{
+						line.unblockCanton(e.getPosition());
+					}
+				} catch (TerminusException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+			}
+		}
+	}
+
 	
 }

@@ -12,11 +12,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -45,8 +43,6 @@ public class SimulationGUI extends JFrame implements Runnable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int TRAIN_SPEED_VARIATION = 3;
-	private static final int TRAIN_BASIC_SPEED = 2;
 	private String path="";
 	private SimulationDashboard dashboard;
 	private TrainSimulator trainsim;
@@ -73,7 +69,6 @@ public class SimulationGUI extends JFrame implements Runnable {
 	private JPanel hourPanel = new JPanel();
 	private JLabel hourLabel;
 	
-	private ArrayList<Event> events = new ArrayList<Event>();
 	
 	ImageIcon hoursIcon = new ImageIcon(new ImageIcon("./img/icons/hours.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
 	ImageIcon eventsIcon = new ImageIcon(new ImageIcon("./img/icons/events.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
@@ -233,21 +228,15 @@ public class SimulationGUI extends JFrame implements Runnable {
 				System.err.println(e.getMessage());
 			}
 			currentTime++;
-			decrementEvents();
+			trainsim.decrementEvents();
+			eventsPanel.repaint();
 		}
 	}
 
 	public void addEvent(Event e) {
-		events.add(e);
+		trainsim.addEvent(e);
 		dashboard.addEvent(e);
 		dashboard.repaint();
-	}
-	
-	public void decrementEvents() {
-		for(Event e : events) {
-			e.decrementDuration();
-		}
-		eventsPanel.repaint();
 	}
 
 	public static float getCurrentTime(){
