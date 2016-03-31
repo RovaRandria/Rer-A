@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
+/**
+ * Data class describing a line.
+ * @author Rova
+ * 
+ */
 public class Line {
 
 	private int totallength;
@@ -17,7 +21,11 @@ public class Line {
 	public Line(int totallength) {
 		this.totallength = totallength;
 	}
-
+	/**
+	 * Method used to add a canton to the line.
+	 * @param id The id of the new canton.
+	 * @param cantonLength The length of the new canton.
+	 */
 	public void addCanton(int id, int cantonLength) {
 		Canton canton;
 		if (usedLength + cantonLength <= totallength) {
@@ -29,7 +37,11 @@ public class Line {
 		}
 		cantons.add(canton);
 	}
-
+	/**
+	 * Method used to add a station to the line.
+	 * @param name The name of the new station.
+	 * @param position The position on the line of the new staton.
+	 */
 	public void addStation(String name, int position ){
 		Station station = new Station(name, position);
 		
@@ -62,6 +74,12 @@ public class Line {
 		return cantons.get(i);
 	}
 	
+	/**
+	 * Method that returns the canton at a position on the line.
+	 * @param position
+	 * @return
+	 * @throws TerminusException
+	 */
 	public Canton getCantonByPosition(int position) throws TerminusException {
 		for (Canton canton : cantons) {
 			if (canton.getEndPoint() > position) {
@@ -76,7 +94,11 @@ public class Line {
 	public ArrayList<Station> getFullPath(){
 		return (ArrayList<Station>)  stations.clone();
 	}
-
+	
+	/**
+	 * Builds the reversedLine of the line.
+	 * @return
+	 */
 	public Line getReversedLine(){
 		Line reversedLine = new Line(this.totallength);
 		int i;
@@ -90,11 +112,20 @@ public class Line {
 		
 		return reversedLine;
 	}
-
+	/**
+	 * Blocks the canton located at a position.
+	 * @param position
+	 * @throws TerminusException
+	 */
 	public void blockCanton(int position) throws TerminusException{
 		Canton c = getCantonByPosition(position);
 		c.block();
 	}
+	/**
+	 * Unblocks the canton located at a position.
+	 * @param position
+	 * @throws TerminusException
+	 */
 	public void unblockCanton(int position) throws TerminusException{
 		Canton c = getCantonByPosition(position);
 		c.unblock();

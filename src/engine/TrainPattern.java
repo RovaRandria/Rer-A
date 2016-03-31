@@ -2,6 +2,11 @@ package engine;
 
 import java.util.ArrayList;
 
+/**
+ * Data class describing a train pattern.
+ * @author Rova
+ *
+ */
 public class TrainPattern {
 	private String patternCode;
 	private ArrayList<Station> pattern= new ArrayList<Station>();

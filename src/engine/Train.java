@@ -7,7 +7,11 @@ import java.util.List;
 
 import gui.SimulationGUI;
 
-
+/**
+ * Data class containing the train tread.
+ * @author Rova
+ *
+ */
 public class Train extends Thread {
 	private volatile int position = 0;
 	private Line line;
@@ -47,7 +51,9 @@ public class Train extends Thread {
 	public void setCurrentCanton(Canton currentCanton) {
 		this.currentCanton = currentCanton;
 	}
-
+	/**
+	 * Execution of the thread that contains the train's behavior.
+	 */
 	@Override
 	public void run() {
 		if(!running && !hasArrived){
@@ -146,7 +152,9 @@ public class Train extends Thread {
 	public void setPath(ArrayList<Station> path){
 		this.path = path;
 	}
-	
+	/**
+	 * Make the train start running.
+	 */
 	public synchronized void startRunning(){
 		if(!path.isEmpty()){
 			currentStation = path.get(0);
@@ -169,7 +177,10 @@ public class Train extends Thread {
 		return line;
 	}
 
-
+	/**
+	 * Builds a HashMap that contains the schedules at each station.
+	 * @return
+	 */
 	public HashMap<Station, Integer> getSchedules(){
 		HashMap<Station, Integer> schedules = new HashMap<Station,Integer>();
 		float totalTimeStation = 0;

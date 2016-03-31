@@ -31,8 +31,8 @@ public class HoursPanel extends JPanel {
 	}
 	
 	public void setStation(Station station) {
-		trainsim.UpdateSchedules();
-		list1.setText(trainsim.SchedulesToString(station));
+		trainsim.updateSchedules();
+		list1.setText(trainsim.schedulesToString(station));
 		stationLabel.setText(station.getName());
 	}
 

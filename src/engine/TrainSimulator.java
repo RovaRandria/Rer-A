@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+/**
+ * Contains the simulation data.
+ * @author Rova
+ *
+ */
 public class TrainSimulator {
 
 	private Line line;
@@ -21,7 +26,10 @@ public class TrainSimulator {
 		this.trains = new ArrayList<Train>();
 		schedules = new HashMap<Station, ArrayList<Integer>>();
 	}
-	
+	/**
+	 * Add a train to the simulation.
+	 * @param train
+	 */
 	public void addTrain(Train train) {
 		trains.add(train);
 	}
@@ -37,8 +45,10 @@ public class TrainSimulator {
 	public ArrayList<Train> getTrains() {
 		return trains;
 	}
-	
-	public void UpdateSchedules(){
+	/**
+	 * Update the schedules
+	 */
+	public void updateSchedules(){
 		schedules = new HashMap<Station, ArrayList<Integer>>();
 		
 		for(Station s : line.getStations()){
@@ -55,7 +65,9 @@ public class TrainSimulator {
 			}
 		}
 	}
-	
+	/**
+	 * Delete the train that are arrived.
+	 */
 	public void updateTrains(){
 		for(int i=0;i<trains.size();i++){
 			if(trains.get(i).isArrived()){
@@ -64,8 +76,11 @@ public class TrainSimulator {
 			}
 		}
 	}
-	
-	public String SchedulesToString(){
+	/**
+	 * Displays the schedules for each station.
+	 * @return
+	 */
+	public String schedulesToString(){
 		//Iterator<Entry<Station, ArrayList<Integer>>> it = schedules.entrySet().iterator();
 		String scheduleStr = "Horaires :\n";
 		for(Station s : line.getStations()){
@@ -79,8 +94,12 @@ public class TrainSimulator {
 		}
 		return scheduleStr;
 	}
-	
-	public String SchedulesToString(Station s){
+	/**
+	 * Displays the schedules at a station.
+	 * @param s
+	 * @return
+	 */
+	public String schedulesToString(Station s){
 		//Iterator<Entry<Station, ArrayList<Integer>>> it = schedules.entrySet().iterator();
 		String scheduleStr = "Horaires :\n";
 		String str = s.getName() + " : ";
@@ -91,7 +110,10 @@ public class TrainSimulator {
 		scheduleStr += str+"\n";
 		return scheduleStr;
 	}
-	
+	/**
+	 * Add an event to the simulation. The canton at the event's position becomes blocked.
+	 * @param e
+	 */
 	public void addEvent(Event e) {
 		events.add(e);
 		try {
@@ -106,7 +128,9 @@ public class TrainSimulator {
 			e1.printStackTrace();
 		}		
 	}
-	
+	/**
+	 * Unblocks the cantons where the events are over.
+	 */
 	public void decrementEvents() {
 		for(Event e : events) {
 			boolean notFinished = e.getDuration() > 0;

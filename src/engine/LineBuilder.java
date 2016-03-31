@@ -8,13 +8,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-/**
+/** Contains the line builder methods.
  * @author tliu@u-cergy.fr
  */
 public class LineBuilder {
 	private Line line;
 	private Line reversedLine;
-
+	
+	/**
+	 * Builds a line from a .txt file.
+	 * @param fileName
+	 */
 	public void buildLine(String fileName) {
 		/*line = new Line(totalLength);
 		int id = 1;
