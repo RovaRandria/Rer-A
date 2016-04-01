@@ -20,7 +20,11 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
 import engine.Event;
-
+/**
+ * The panel that contains the events management graphic components.
+ * @author Rova
+ *
+ */
 public class EventsPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

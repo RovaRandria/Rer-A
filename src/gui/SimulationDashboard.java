@@ -18,7 +18,11 @@ import engine.Line;
 import engine.Station;
 import engine.Train;
 
-
+/**
+ * Describes the dashboard that draws the simulation's components.
+ * @author Rova
+ *
+ */
 public class SimulationDashboard extends JPanel {
 	/**
 	 * 
@@ -64,7 +68,9 @@ public class SimulationDashboard extends JPanel {
 				// TODO Auto-generated method stub
 				
 			}
-			
+			/**
+			 * A mouse click on a station displays the corresponding schedules.
+			 */
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(!eventmode) {
@@ -116,7 +122,9 @@ public class SimulationDashboard extends JPanel {
 	public void setReversedLine(Line reversedLine) {
 		this.reversedLine = reversedLine;
 	}
-
+	/**
+	 * Paints the dashboard.
+	 */
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -125,7 +133,14 @@ public class SimulationDashboard extends JPanel {
 		printLine(reversedLine, START_X, START_Y + 150, g2, true);
 		printTrains(START_X, START_Y, g2);
 	}
-
+	/**
+	 * Draws the line.
+	 * @param line
+	 * @param startX
+	 * @param startY
+	 * @param g2
+	 * @param reverse
+	 */
 	private void printLine(Line line, int startX, int startY, Graphics2D g2, boolean reverse) {
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(new Color(200,200,0,255));
@@ -160,7 +175,12 @@ public class SimulationDashboard extends JPanel {
 		}
 	}
 	
-
+	/**
+	 * Draws the trains.
+	 * @param startX
+	 * @param startY
+	 * @param g2
+	 */
 	private void printTrains(int startX, int startY, Graphics2D g2) {
 		g2.setColor(Color.RED);
 		g2.setStroke(new BasicStroke(6));
@@ -178,7 +198,14 @@ public class SimulationDashboard extends JPanel {
 			}
 		}	
 	}
-
+	/**
+	 * Draws the station.
+	 * @param startX
+	 * @param startY
+	 * @param g2
+	 * @param s
+	 * @param textPos
+	 */
 	private void drawStation(int startX, int startY, Graphics2D g2, Station s, int textPos){
 		int x = startX + s.getPosition()/distancePerPixel;
 		int y = startY;

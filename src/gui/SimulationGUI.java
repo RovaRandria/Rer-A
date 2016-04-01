@@ -37,7 +37,11 @@ import engine.Train;
 import engine.TrainPattern;
 import engine.TrainSimulator;
 
-
+/**
+ * The main class that contains the simulation's graphic components.
+ * @author Rova
+ *
+ */
 public class SimulationGUI extends JFrame implements Runnable {
 	/**
 	 * 
@@ -154,7 +158,9 @@ public class SimulationGUI extends JFrame implements Runnable {
 		setLocationRelativeTo(null);
 	}
 
-
+	/**
+	 * The thread that reads simulation data, creates it, displays the components and updates it.
+	 */
 	@Override
 	public void run() {
 
@@ -248,7 +254,11 @@ public class SimulationGUI extends JFrame implements Runnable {
 	public static void setCurrentTime(int currentTime){
 		SimulationGUI.currentTime = currentTime;
 	}
-
+	/**
+	 * Chooses a new file that launch a new simulation with an line building.
+	 * @author Rova
+	 *
+	 */
 	private class PathBrowserAction implements ActionListener {
 		public void actionPerformed(ActionEvent e){
 			
@@ -265,10 +275,11 @@ public class SimulationGUI extends JFrame implements Runnable {
 			}
 		}
 	}
-	
-
-
-	
+	/**
+	 * Returns a path file.	
+	 * @param storepath
+	 * @return
+	 */
 	public String Storepath(String storepath){
 		Container contentPane = getContentPane();
 
@@ -297,14 +308,22 @@ public class SimulationGUI extends JFrame implements Runnable {
 	public SimulationDashboard getDashboard() {
 		return dashboard;
 	}
-
+	/**
+	 * Changes the speed of the simulation.
+	 * @author Rova
+	 *
+	 */
 	private class SpeedChangingAction implements ChangeListener {
 		public void stateChanged(ChangeEvent e) {
 			SimulationGUI.setSpeed((float)((JSlider) e.getSource()).getValue()/10);
 			SimulationGUI.setTimeUnit((int)(SimulationGUI.getTimeInit()/SimulationGUI.getSpeed()));
 		}
 	}
-	
+	/**
+	 * Changes the zoom level of the dashboard.
+	 * @author Rova
+	 *
+	 */
 	private class ZoomAction implements ChangeListener {
 		public void stateChanged(ChangeEvent e) {
 			int newSize = (((JSlider) e.getSource()).getValue());
@@ -316,7 +335,11 @@ public class SimulationGUI extends JFrame implements Runnable {
 			instance.repaint();
 		}
 	}
-	
+	/**
+	 * Adds a new train to the simulation
+	 * @author Rova
+	 *
+	 */
 	private class AddTrainAction implements ActionListener {
 		public void actionPerformed(ActionEvent ae){
 			String direction;
@@ -348,7 +371,11 @@ public class SimulationGUI extends JFrame implements Runnable {
 			managementPanel.repaint();
 		}
 	}
-	
+	/**
+	 * Chooses the line where the event is located.
+	 * @author Rova
+	 *
+	 */
 	private class UpdateComboBoxLineAction implements ActionListener {
 		public void actionPerformed(ActionEvent e){
 			managementPanel.getTrainsComboBox().removeAllItems();

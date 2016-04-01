@@ -21,7 +21,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 
 import engine.Train;
-
+/**
+ * The panel that contains the simulation's settings graphic components.
+ * @author Rova
+ *
+ */
 public class ManagementPanel extends JPanel{
 	
 	private static final long serialVersionUID = 1L;

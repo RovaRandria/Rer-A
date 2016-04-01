@@ -12,7 +12,11 @@ import javax.swing.JTextArea;
 
 import engine.Station;
 import engine.TrainSimulator;
-
+/**
+ * The panel that contains the schedules display.
+ * @author Rova
+ *
+ */
 public class HoursPanel extends JPanel {
 
 	private static final long serialVersionUID = -7763610983537444401L;
