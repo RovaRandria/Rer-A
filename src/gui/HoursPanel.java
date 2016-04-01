@@ -40,9 +40,8 @@ public class HoursPanel extends JPanel {
 		jsp1.setViewportView(list1);
 		jsp2.setViewportView(list2);
 		list1.setPreferredSize(new Dimension(250, 100));
-		list2.setPreferredSize(new Dimension(250, 100));
+		list1.setEditable(false);
 		jsp1.setPreferredSize(new Dimension(300, 150));
-		jsp2.setPreferredSize(new Dimension(300, 150));
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints frameConstraints = new GridBagConstraints();
 		frameConstraints.gridx = 0;
@@ -51,16 +50,16 @@ public class HoursPanel extends JPanel {
 		this.add(stationLabel, frameConstraints);
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 1;
-		this.add(new JLabel("Direction Marne-la-Vallée Chessy"), frameConstraints);
-		frameConstraints.gridx = 1;
+		this.add(new JLabel("Prochains trains"), frameConstraints);
+		/*frameConstraints.gridx = 1;
 		frameConstraints.gridy = 1;
-		this.add(new JLabel("Direction Cergy"), frameConstraints);
+		this.add(new JLabel("Direction Cergy"), frameConstraints);*/
 		frameConstraints.gridx = 0;
 		frameConstraints.gridy = 2;
 		this.add(jsp1, frameConstraints);
-		frameConstraints.gridx = 1;
+		/*frameConstraints.gridx = 1;
 		frameConstraints.gridy = 2;
-		this.add(jsp2, frameConstraints);
+		this.add(jsp2, frameConstraints);*/
 	}
 
 	public boolean isCurrentPan() {

@@ -79,7 +79,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		super("Train simulation");
 		init(fileName);
 		setVisible(true);
-		Exit();
+		exit();
 	}	
 
 	public SimulationGUI() {
@@ -88,7 +88,7 @@ public class SimulationGUI extends JFrame implements Runnable {
 		simulationThread.start();
 	}
 	
-	 public void Exit(){
+	 public void exit(){
 	      addWindowListener(new WindowAdapter(){
 	         public void windowClosing(WindowEvent e){
 	           dispose();

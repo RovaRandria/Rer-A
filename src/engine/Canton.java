@@ -9,16 +9,12 @@ public class Canton {
 	private int startPoint;
 	private int length;
 	private Train occupyingTrain = null;
-	private Station enterStation;
-	private Station exitStation;
 	private boolean blocked;
 
 	public Canton(int id, int length, int startPoint) {
 		this.id = id;
 		this.length = length;
 		this.startPoint = startPoint;
-		enterStation = null;
-		exitStation = null;
 	}
 
 	public int getLength() {
@@ -113,21 +109,7 @@ public class Canton {
 		this.occupyingTrain = occupyingTrain;
 	}
 
-	public Station getEnterStation() {
-		return enterStation;
-	}
-
-	public void setEnterStation(Station enterStation) {
-		this.enterStation = enterStation;
-	}
-
-	public Station getExitStation() {
-		return exitStation;
-	}
-
-	public void setExitStation(Station exitStation) {
-		this.exitStation = exitStation;
-	}
+	
 
 	public void setId(int id) {
 		this.id = id;

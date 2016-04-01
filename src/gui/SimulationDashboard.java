@@ -91,11 +91,11 @@ public class SimulationDashboard extends JPanel {
 				}
 				else {
 					if(e.getY() > SimulationDashboard.this.getHeight()/2) {
-						evpan.setPosition((line.getTotallength()/10 + 50 - e.getX()) * getDistancePerPixel());
+						evpan.setPosition((line.getTotallength()/10 + START_X - e.getX()) * getDistancePerPixel());
 						evpan.setDirection(true);
 					}
 					else {
-						evpan.setPosition(e.getX()*getDistancePerPixel());
+						evpan.setPosition((e.getX()-START_X)*getDistancePerPixel());
 						evpan.setDirection(false);
 					}
 					eventmode = false;

@@ -43,7 +43,7 @@ public class EventsPanel extends JPanel {
 	
 	private JCheckBox lineCheckBox = new JCheckBox("Direction Marne-La-Vallée");
 	
-	private JCheckBox reversedLneCheckBox = new JCheckBox("Direction Cergy-Le-Haut");
+	private JCheckBox reversedLineCheckBox = new JCheckBox("Direction Cergy-Le-Haut");
 
 	private JButton selectPosition = new JButton("Sélectionner position");
 
@@ -60,7 +60,7 @@ public class EventsPanel extends JPanel {
 
 	static final int TIME_MIN = 0;
 	static final int TIME_MAX = 5000;
-	static final int TIME_INIT = 0;
+	static final int TIME_INIT = 50;
 
 	public EventsPanel(SimulationGUI sim) {
 		super();
@@ -87,9 +87,16 @@ public class EventsPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int position = (Integer)positionSpinner.getValue();
 				if((Integer)durationSpinner.getValue() > 0){
-//					Event ev = new Event((reverse.isSelected())?sim.getLine().getTotallength()-position:position, (Integer)durationSpinner.getValue(), reverse.isSelected(), "");
-//					sim.addEvent(ev);
-//					((DefaultListModel)eventsList.getModel()).addElement(ev);
+					if(lineCheckBox.isSelected()){
+						Event ev = new Event(position, (Integer)durationSpinner.getValue(), false, eventNameTextField.getText());
+						sim.addEvent(ev);
+						((DefaultListModel)eventsList.getModel()).addElement(ev);
+					}
+					if(reversedLineCheckBox.isSelected()){
+						Event ev = new Event(sim.getLine().getTotallength()-position, (Integer)durationSpinner.getValue(), true, eventNameTextField.getText());
+						sim.addEvent(ev);
+						((DefaultListModel)eventsList.getModel()).addElement(ev);
+					}
 				}
 			}
 		});
@@ -127,7 +134,7 @@ public class EventsPanel extends JPanel {
 		frameConstraints.gridx = 3;
 		this.add(lineCheckBox, frameConstraints);
 		frameConstraints.gridy = 2;
-		this.add(reversedLneCheckBox, frameConstraints);
+		this.add(reversedLineCheckBox, frameConstraints);
 		
 		frameConstraints.anchor = GridBagConstraints.CENTER;
 		frameConstraints.fill = GridBagConstraints.CENTER;
@@ -161,6 +168,10 @@ public class EventsPanel extends JPanel {
 	}
 	
 	public void setDirection(boolean reverse) {
-		//this.reverse.setSelected(reverse);
+		if(reverse)
+			reversedLineCheckBox.setSelected(true);
+		else
+			lineCheckBox.setSelected(true);
+			//this.reverse.setSelected(reverse);
 	}
 }
