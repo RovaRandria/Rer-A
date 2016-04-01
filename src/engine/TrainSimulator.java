@@ -101,7 +101,7 @@ public class TrainSimulator {
 	 * Displays the schedules at a station.
 	 * @param s
 	 * @return
-	 */
+	*/
 	public String schedulesToString(Station s){
 		//Iterator<Entry<Station, ArrayList<Integer>>> it = schedules.entrySet().iterator();
 		String scheduleStr = "Horaires :\n";
